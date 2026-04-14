@@ -69,12 +69,20 @@
         surface to a peak at the center.
       </p>
       <p>
-        The <strong>left panel</strong> shows the planet cross-section colored
-        by pressure — brightest yellow at the center, darkening through orange
-        to deep blue at the surface. The <strong>right panel</strong> plots
-        <span class="math">P(r)/P_c</span> against
-        <span class="math">r/R</span>; it always hits 1 at the center and 0
-        at the surface regardless of planet size.
+        The <strong>left panel</strong> shows the planet cross-section. The
+        colour at each point encodes the <em>local pressure</em>
+        <span class="math">P(r)</span>: bright yellow at the center (<span class="math">P = P_c</span>),
+        darkening through orange to near-black blue at the surface
+        (<span class="math">P = 0</span>). The vertical colorbar on the right
+        maps colour to pressure explicitly. The gradient follows the
+        parabolic profile <span class="math">P(r)/P_c = 1 - (r/R)^2</span>,
+        so half the radius is already at <span class="math">0.75\,P_c</span>
+        (still hot) — most of the mass of a planet sits near the surface,
+        where pressure is low, while the deep interior is compressed hard.
+        The <strong>right panel</strong> plots that same
+        <span class="math">P(r)/P_c</span> against <span class="math">r/R</span>
+        as a curve, and shows the current <span class="math">P_c</span> in
+        absolute units below it.
       </p>
       <p>
         The central-pressure formula <span class="math">P_c = 3GM^2/(8\pi R^4)</span>

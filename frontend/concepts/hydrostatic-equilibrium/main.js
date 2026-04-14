@@ -108,24 +108,58 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+// ── Color ramp used for pressure mapping ─────────────────────────────────────
+// Maps a value u ∈ [0, 1] (= P/Pc) to a colour string. 1 = hot yellow, 0 = black.
+const PRESSURE_STOPS = [
+  { u: 0.00, c: '#1a2332' },  // P = 0 : near-black blue
+  { u: 0.20, c: '#264653' },  // dark teal
+  { u: 0.45, c: '#e76f51' },  // deep orange-red
+  { u: 0.70, c: '#f4a261' },  // warm orange
+  { u: 1.00, c: '#ffd166' },  // P = Pc : bright yellow
+];
+
+function hex2rgb(h) {
+  const n = parseInt(h.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+function lerp(a, b, t) { return a + (b - a) * t; }
+function pressureColor(u) {
+  u = Math.max(0, Math.min(1, u));
+  for (let i = 0; i < PRESSURE_STOPS.length - 1; i++) {
+    const s0 = PRESSURE_STOPS[i];
+    const s1 = PRESSURE_STOPS[i + 1];
+    if (u >= s0.u && u <= s1.u) {
+      const t = (u - s0.u) / (s1.u - s0.u);
+      const a = hex2rgb(s0.c);
+      const b = hex2rgb(s1.c);
+      return `rgb(${Math.round(lerp(a[0], b[0], t))}, ${Math.round(lerp(a[1], b[1], t))}, ${Math.round(lerp(a[2], b[2], t))})`;
+    }
+  }
+  return PRESSURE_STOPS[PRESSURE_STOPS.length - 1].c;
+}
+
 // ── Left panel: planet cross-section ─────────────────────────────────────────
 function drawPlanet(px, py, pw, ph, Pc, R_eu) {
-  // Usable area inside panel
-  const cx = px + pw / 2;
+  // Reserve space on the right for a pressure colorbar legend.
+  const BAR_W = 60;
+  const bodyW = pw - BAR_W;
+  const cx = px + bodyW / 2;
   const cy = py + ph / 2;
-  const frameMax = Math.min(pw, ph) / 2 - 16;  // max room available
+  const frameMax = Math.min(bodyW, ph) / 2 - 16;  // max room available
   // Visually scale with slider R (Earth radii). sqrt compression so Mars and
   // Jupiter both fit on screen: Earth → 30 % of frame, Jupiter (11 Re) → ~99 %.
   const scale = Math.max(0.08, Math.min(0.95, 0.30 * Math.sqrt(R_eu)));
   const maxR = frameMax * scale;
 
-  // Radial gradient: yellow center → orange → dark blue at surface
+  // Radial gradient — stops placed so the colour at radius r corresponds to
+  // the parabolic pressure profile P(r)/Pc = 1 − (r/R)². So a stop at radial
+  // fraction t should use the colour for P/Pc = 1 − t².
   const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
-  grad.addColorStop(0,    '#ffd166');   // center: bright yellow
-  grad.addColorStop(0.35, '#f4a261');   // warm orange
-  grad.addColorStop(0.65, '#e76f51');   // deeper orange-red
-  grad.addColorStop(0.85, '#264653');   // dark teal
-  grad.addColorStop(1,    '#1a2332');   // near-black blue at surface
+  const gradT = [0.00, 0.30, 0.55, 0.75, 0.90, 1.00];
+  for (const t of gradT) {
+    const pFrac = 1 - t * t;
+    grad.addColorStop(t, pressureColor(pFrac));
+  }
 
   // Draw filled planet disc
   ctx.beginPath();
@@ -181,6 +215,63 @@ function drawPlanet(px, py, pw, ph, Pc, R_eu) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';
   ctx.fillText('R', cx + maxR / 2, cy - 5);
+
+  // ── Colorbar legend ─────────────────────────────────────────────────────
+  // Vertical bar on the right edge of the panel, yellow (Pc) at top → black
+  // (0) at bottom. Tells the reader that colour = pressure.
+  const barX  = px + pw - BAR_W + 10;
+  const barW  = 14;
+  const barY  = py + 40;
+  const barH  = ph - 80;
+
+  // Fill using the same ramp, top = 1, bottom = 0.
+  const barGrad = ctx.createLinearGradient(0, barY, 0, barY + barH);
+  for (let i = 0; i <= 10; i++) {
+    const frac = i / 10;                  // 0 at top, 1 at bottom
+    barGrad.addColorStop(frac, pressureColor(1 - frac));
+  }
+  ctx.fillStyle = barGrad;
+  ctx.fillRect(barX, barY, barW, barH);
+  ctx.strokeStyle = '#30363d';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(barX, barY, barW, barH);
+
+  // Bar title
+  ctx.fillStyle = '#8b949e';
+  ctx.font = '11px -apple-system, Segoe UI, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('P(r)', barX + barW / 2, barY - 6);
+
+  // End labels
+  ctx.fillStyle = '#ffd166';
+  ctx.font = 'bold 11px -apple-system, Segoe UI, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('P_c', barX + barW + 4, barY + 4);
+
+  ctx.fillStyle = '#8b949e';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('0', barX + barW + 4, barY + barH - 4);
+
+  // Tick marks at P/Pc = 0.25, 0.5, 0.75
+  ctx.strokeStyle = '#8b949e';
+  ctx.lineWidth = 1;
+  for (const frac of [0.25, 0.5, 0.75]) {
+    const ty = barY + barH * (1 - frac);
+    ctx.beginPath();
+    ctx.moveTo(barX + barW, ty);
+    ctx.lineTo(barX + barW + 3, ty);
+    ctx.stroke();
+  }
+
+  // Caption under the bar explaining the mapping
+  ctx.fillStyle = '#8b949e';
+  ctx.font = '10px -apple-system, Segoe UI, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText('colour =', barX + barW / 2 - 2, barY + barH + 6);
+  ctx.fillText('pressure', barX + barW / 2 - 2, barY + barH + 18);
 }
 
 // ── Right panel: P(r)/Pc vs r/R ──────────────────────────────────────────────

@@ -120,6 +120,39 @@
         <canvas id="multipole-canvas" width="850" height="520"></canvas>
       </div>
 
+      <h4>How does the gravity quadrupole "work" without repulsion?</h4>
+      <p>
+        Important subtlety: gravity has no <span class="math">-M</span>,
+        so the gravitational quadrupole is <strong>not</strong> a separate
+        field with inward and outward arrows like the electric one above.
+        It's a <em>correction</em> on top of the always-inward monopole.
+      </p>
+      <p>
+        To see the correction by itself, compare the real lumpy field to
+        the field a point mass at the center would produce, and look at
+        the <em>difference</em>. The two panels below show exactly that:
+      </p>
+      <div class="panel">
+        <canvas id="residual-canvas" width="850" height="320"></canvas>
+      </div>
+      <p>
+        The <strong>left panel</strong> shows the real, total gravity
+        field of an oblate body — every arrow points inward, just at
+        slightly different lengths around the body. <strong>Total
+        attraction is always inward; nothing is being pushed away.</strong>
+      </p>
+      <p>
+        The <strong>right panel</strong> shows the residual — the
+        difference between the real field and an equivalent point-mass
+        sphere's field. Now you can see the four-lobe pattern: residual
+        arrows at the equator point <em>inward</em> (the bulge gives
+        extra pull, more than a sphere would) and residual arrows at the
+        poles point <em>outward</em> (less pull than a sphere would,
+        because there's less mass overhead). Add this residual back to
+        the always-inward monopole and you recover the left panel —
+        with a subtle but real 4-lobe deviation.
+      </p>
+
       <h3>Visualizing the quadrupole correction</h3>
       <p>
         Drag the oblateness slider below. The blue body deforms from a

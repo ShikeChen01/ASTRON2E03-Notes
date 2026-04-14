@@ -806,3 +806,159 @@ function drawMultipole() {
 }
 
 drawMultipole();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Fourth canvas: real field vs residual after subtracting point-mass equivalent
+// ─────────────────────────────────────────────────────────────────────────────
+const residualCanvas = document.getElementById('residual-canvas');
+const residualCtx    = residualCanvas.getContext('2d');
+
+function resArrow(x1, y1, x2, y2, color, width = 2) {
+  residualCtx.strokeStyle = color;
+  residualCtx.fillStyle   = color;
+  residualCtx.lineWidth   = width;
+  residualCtx.beginPath();
+  residualCtx.moveTo(x1, y1);
+  residualCtx.lineTo(x2, y2);
+  residualCtx.stroke();
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const head = 6;
+  residualCtx.beginPath();
+  residualCtx.moveTo(x2, y2);
+  residualCtx.lineTo(x2 - head * Math.cos(ang - 0.4), y2 - head * Math.sin(ang - 0.4));
+  residualCtx.lineTo(x2 - head * Math.cos(ang + 0.4), y2 - head * Math.sin(ang + 0.4));
+  residualCtx.closePath();
+  residualCtx.fill();
+}
+
+function drawResidual() {
+  const W = residualCanvas.width;
+  const H = residualCanvas.height;
+  residualCtx.clearRect(0, 0, W, H);
+
+  const colW = W / 2;
+  const f = 0.3;                       // fixed exaggerated oblateness
+  const J2 = (2*f - f*f) / 5;
+  const aPx = 60;                      // equatorial radius in px
+  const cPx = aPx * (1 - f);
+  const ringR = aPx * 1.6;
+  const r_norm = ringR / aPx;
+  const monopole = 1 / (r_norm * r_norm);
+
+  // ── Left panel: real total field ────────────────────────────────────────
+  const lcx = colW / 2;
+  const lcy = H / 2 + 10;
+
+  residualCtx.fillStyle = '#7aa2f7';
+  residualCtx.beginPath();
+  residualCtx.ellipse(lcx, lcy, aPx, cPx, 0, 0, 2 * Math.PI);
+  residualCtx.fill();
+  residualCtx.strokeStyle = '#30363d';
+  residualCtx.lineWidth = 1.5;
+  residualCtx.beginPath();
+  residualCtx.ellipse(lcx, lcy, aPx, cPx, 0, 0, 2 * Math.PI);
+  residualCtx.stroke();
+
+  for (let i = 0; i < 16; i++) {
+    const ang = (i / 16) * 2 * Math.PI;
+    const px = lcx + ringR * Math.cos(ang);
+    const py = lcy + ringR * Math.sin(ang);
+    const lat = Math.asin(Math.abs(Math.sin(ang)));
+    const quad = -(3 * J2) / (2 * Math.pow(r_norm, 4)) * (3 * Math.sin(lat)**2 - 1);
+    const g = monopole + quad;
+    const len = 36 * (g / monopole);
+
+    const dx = (lcx - px) / ringR;
+    const dy = (lcy - py) / ringR;
+    const ex = px + dx * len;
+    const ey = py + dy * len;
+
+    const t = (g / monopole - 1) * 4;
+    const tC = Math.max(-1, Math.min(1, t));
+    const color = tC >= 0
+      ? `rgb(${Math.round(160 - 60 * tC)}, ${Math.round(200 + 55 * tC)}, 100)`
+      : `rgb(${Math.round(220 + 35 * (-tC))}, 120, 120)`;
+    resArrow(px, py, ex, ey, color, 2);
+  }
+
+  residualCtx.fillStyle = '#e6edf3';
+  residualCtx.font = 'bold 14px -apple-system, Segoe UI, sans-serif';
+  residualCtx.textAlign = 'center';
+  residualCtx.textBaseline = 'top';
+  residualCtx.fillText('Real total field (always inward)', lcx, 14);
+  residualCtx.fillStyle = '#8b949e';
+  residualCtx.font = '11px -apple-system, Segoe UI, sans-serif';
+  residualCtx.fillText('= monopole + quadrupole correction', lcx, 32);
+
+  // ── Right panel: residual after subtracting equivalent sphere ──────────
+  const rcx = colW + colW / 2;
+  const rcy = H / 2 + 10;
+
+  // Faint ghost of where the sphere would be (radius = a, for visual reference)
+  residualCtx.strokeStyle = '#30363d';
+  residualCtx.lineWidth = 1;
+  residualCtx.setLineDash([3, 3]);
+  residualCtx.beginPath();
+  residualCtx.arc(rcx, rcy, aPx, 0, 2 * Math.PI);
+  residualCtx.stroke();
+  residualCtx.setLineDash([]);
+
+  // Tiny center dot to mark the equivalent point mass
+  residualCtx.fillStyle = '#8b949e';
+  residualCtx.beginPath();
+  residualCtx.arc(rcx, rcy, 3, 0, 2 * Math.PI);
+  residualCtx.fill();
+
+  // Residual arrows: g - monopole = quadrupole correction
+  // Sign tells us direction. If correction > 0 (extra attraction), arrow points inward.
+  // If correction < 0 (less attraction than spherical), arrow points outward.
+  for (let i = 0; i < 16; i++) {
+    const ang = (i / 16) * 2 * Math.PI;
+    const px = rcx + ringR * Math.cos(ang);
+    const py = rcy + ringR * Math.sin(ang);
+    const lat = Math.asin(Math.abs(Math.sin(ang)));
+    const quad = -(3 * J2) / (2 * Math.pow(r_norm, 4)) * (3 * Math.sin(lat)**2 - 1);
+
+    // Amplify so we can see the small residual clearly
+    const len = quad * 1200;     // signed length
+    const absLen = Math.abs(len);
+    if (absLen < 1) continue;
+
+    const dxIn = (rcx - px) / ringR;     // inward unit vector
+    const dyIn = (rcy - py) / ringR;
+    // sign: positive quad ⇒ extra inward pull ⇒ arrow inward
+    const sign = quad > 0 ? +1 : -1;
+    const ex = px + sign * dxIn * absLen;
+    const ey = py + sign * dyIn * absLen;
+
+    const color = sign > 0 ? '#9ece6a' : '#f7768e';
+    resArrow(px, py, ex, ey, color, 2);
+  }
+
+  residualCtx.fillStyle = '#e6edf3';
+  residualCtx.font = 'bold 14px -apple-system, Segoe UI, sans-serif';
+  residualCtx.textAlign = 'center';
+  residualCtx.textBaseline = 'top';
+  residualCtx.fillText('Residual = real field − point-mass field', rcx, 14);
+  residualCtx.fillStyle = '#8b949e';
+  residualCtx.font = '11px -apple-system, Segoe UI, sans-serif';
+  residualCtx.fillText('the pure quadrupole correction', rcx, 32);
+
+  // Legend on right panel
+  residualCtx.font = '11px -apple-system, Segoe UI, sans-serif';
+  residualCtx.textAlign = 'left';
+  residualCtx.fillStyle = '#9ece6a';
+  residualCtx.fillText('green inward = extra pull (equator)', rcx - colW/2 + 12, H - 32);
+  residualCtx.fillStyle = '#f7768e';
+  residualCtx.fillText('red outward = missing pull (poles)', rcx - colW/2 + 12, H - 16);
+
+  // Divider
+  residualCtx.strokeStyle = '#30363d';
+  residualCtx.lineWidth = 1;
+  residualCtx.beginPath();
+  residualCtx.moveTo(colW, 10);
+  residualCtx.lineTo(colW, H - 10);
+  residualCtx.stroke();
+}
+
+drawResidual();

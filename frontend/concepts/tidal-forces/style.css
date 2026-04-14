@@ -1,0 +1,33 @@
+#tidal { aspect-ratio: 9 / 4; }
+
+.controls span { color: var(--fg); font-variant-numeric: tabular-nums; }
+
+/* Readout box: shows g and F_tide side by side */
+.readout-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  min-width: 180px;
+}
+
+.readout-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.readout-label {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.readout-val {
+  color: var(--fg);
+  font-weight: 600;
+}

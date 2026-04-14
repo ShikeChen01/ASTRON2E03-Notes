@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Conservation Laws — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Conservation Laws in Orbital Mechanics</h1>
+      <p class="subtitle">
+        Energy and angular momentum: two scalar quantities that never change
+        as a planet sweeps around its ellipse.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">E = \tfrac{1}{2} \mu v^2 - \frac{GM\mu}{r}</span></p>
+        <p><span class="math-display">L = \mu \, |\mathbf{r} \times \mathbf{v}| = \mu r v_\perp</span></p>
+        <p><span class="math-display">E = -\frac{GM\mu}{2a}, \qquad L^2 = GM\mu^2 \, a(1-e^2)</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="orbit" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Eccentricity (e)
+            <input id="ecc" type="range" min="0" max="0.85" step="0.01" value="0.5" />
+            <span id="ecc-val">0.50</span>
+          </label>
+          <label>
+            Semi-major axis (a, px)
+            <input id="sma" type="range" min="80" max="250" step="1" value="180" />
+            <span id="sma-val">180</span>
+          </label>
+          <label>
+            Speed
+            <input id="spd" type="range" min="0.2" max="3" step="0.1" value="1" />
+            <span id="spd-val">1.0</span>
+          </label>
+          <button id="toggle">Pause</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The three horizontal bars are computed <em>live</em> from the planet's
+        current position and velocity — nothing is precomputed or faked.
+        <strong>Kinetic energy</strong> (blue bar) peaks at perihelion where
+        the planet moves fastest, while <strong>potential energy</strong>
+        (purple bar, extending left because PE is negative) reaches its most
+        negative value at the same point. Their sum, the
+        <strong>total energy</strong> <span class="math">E</span> (yellow bar),
+        stays flat throughout the orbit — that is energy conservation.
+      </p>
+      <p>
+        The <strong>angular momentum</strong> readout
+        <span class="math">L = \mu r v_\perp</span> in the top-left of the
+        canvas also holds constant. This is not a coincidence:
+        Kepler's 2nd law (equal areas in equal times) is exactly the statement
+        <span class="math">L = \text{const}</span> in disguise — when
+        <span class="math">r</span> is small, <span class="math">v_\perp</span>
+        must be large to keep their product fixed, which is why the planet
+        moves faster near the Sun.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Pause near perihelion (rightmost point): KE is at its max,
+              PE is at its most negative minimum, and the yellow E bar sits
+              exactly where it always does.</li>
+          <li>Drag <span class="math">e</span> to 0: a circular orbit.
+              Because <span class="math">r</span> never changes, both KE
+              and PE are now individually constant — the bars freeze.</li>
+          <li>Drag <span class="math">a</span> (semi-major axis): watch
+              the total energy shift to a new constant level
+              (<span class="math">E = -GM\mu/2a</span>), and
+              <span class="math">L</span> shift too
+              (<span class="math">L^2 \propto a</span>).</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

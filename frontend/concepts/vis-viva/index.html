@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vis-Viva &amp; Kepler III — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Vis-Viva Equation &amp; Kepler's Third Law</h1>
+      <p class="subtitle">
+        Orbital speed at any point on a Kepler orbit, and why the period
+        depends only on the semi-major axis.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p>
+          <span class="math-display">v^2 = GM\left(\frac{2}{r} - \frac{1}{a}\right)</span>
+        </p>
+        <p>
+          <span class="math-display">v_{\text{peri}} = \sqrt{\frac{GM\,(1+e)}{a(1-e)}}, \qquad v_{\text{apo}} = \sqrt{\frac{GM\,(1-e)}{a(1+e)}}</span>
+        </p>
+        <p>
+          <span class="math-display">T^2 = \frac{4\pi^2}{GM}\,a^3</span>
+        </p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="orbit" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Eccentricity (e)
+            <input id="ecc" type="range" min="0" max="0.85" step="0.01" value="0.5" />
+            <span id="ecc-val">0.50</span>
+          </label>
+          <label>
+            Semi-major axis (a, px)
+            <input id="sma" type="range" min="80" max="250" step="1" value="180" />
+            <span id="sma-val">180</span>
+          </label>
+          <label>
+            Speed
+            <input id="spd" type="range" min="0.2" max="3" step="0.1" value="1" />
+            <span id="spd-val">1.0</span>
+          </label>
+          <button id="toggle">Pause</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The <strong>blue arrow</strong> is the planet's velocity vector. Its
+        length changes continuously — orbital speed depends on the current
+        distance <span class="math">r</span> from the focus, not on time.
+        The vis-viva equation makes this explicit: at fixed semi-major axis
+        <span class="math">a</span> (which sets the total orbital energy),
+        speed is highest at <em>perihelion</em> (smallest
+        <span class="math">r</span>) and lowest at <em>aphelion</em> (largest
+        <span class="math">r</span>).
+      </p>
+      <p>
+        The <strong>energy readout</strong>
+        <span class="math">E = \tfrac{1}{2}v^2 - GM/r</span> (in normalized
+        units) stays constant throughout the orbit — this is conservation of
+        mechanical energy, and it is exactly the principle from which vis-viva
+        is derived.
+      </p>
+      <p>
+        <strong>Kepler's third law</strong> tells us
+        <span class="math">T \propto a^{3/2}</span>: the period grows with
+        the semi-major axis alone, independent of eccentricity. Increase
+        <span class="math">a</span> with the slider and watch the planet slow
+        down and take longer to complete each orbit — a distant planet crawls
+        because its orbit is energetically shallower.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>
+            Hold <span class="math">a</span> fixed; slide
+            <span class="math">e</span> from 0 to 0.85. At
+            <span class="math">e=0</span> the speed is constant (circular
+            orbit); by <span class="math">e=0.85</span> it swings wildly
+            between perihelion and aphelion.
+          </li>
+          <li>
+            Set <span class="math">a = 80</span>: the planet sprints around a
+            tight orbit and the period is short. Set
+            <span class="math">a = 250</span>: visibly slower, longer period.
+            That's <span class="math">T \propto a^{3/2}</span> in action.
+          </li>
+          <li>
+            Pause near perihelion and note <span class="math">v</span>. Then
+            resume, pause near aphelion, and note
+            <span class="math">v</span> again. The ratio should be
+            <span class="math">(1+e)/(1-e)</span> — check it yourself!
+          </li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

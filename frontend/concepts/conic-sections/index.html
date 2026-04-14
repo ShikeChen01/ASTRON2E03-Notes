@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Conic Sections — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Equation of the Orbit — Conic Sections</h1>
+      <p class="subtitle">
+        One polar equation produces every possible orbit shape: circle,
+        ellipse, parabola, and hyperbola. Eccentricity is the single knob.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">r(\theta) = \frac{p}{1 + e\cos\theta}</span></p>
+        <p><span class="math-display">e = 0 \,(\text{circle}), \quad 0 < e < 1 \,(\text{ellipse}), \quad e = 1 \,(\text{parabola}), \quad e > 1 \,(\text{hyperbola})</span></p>
+        <p><span class="math-display">\text{Bound:}\ E < 0;\qquad \text{Marginal:}\ E = 0;\qquad \text{Unbound:}\ E > 0</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="conic" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Eccentricity (e)
+            <input id="ecc" type="range" min="0" max="2.0" step="0.01" value="0.5" />
+            <span id="ecc-val">0.50</span>
+          </label>
+          <p id="orbit-type" class="orbit-type-label">Type: <strong>ellipse</strong></p>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The single equation <span class="math">r(\theta) = p\,/\,(1 + e\cos\theta)</span>
+        — called the <em>orbit equation in polar form</em> — produces every
+        possible conic section depending only on the eccentricity
+        <span class="math">e</span>. The focus (yellow dot) sits at the
+        origin of the polar coordinate system, which is why it is the
+        natural home for this equation: every orbit shape is described
+        relative to the gravitating body.
+      </p>
+      <p>
+        Eccentricity is directly tied to total orbital energy
+        <span class="math">E</span>. A negative total energy (<span class="math">E &lt; 0</span>)
+        means the object is gravitationally bound: <span class="math">e &lt; 1</span>
+        gives a closed ellipse (circle when <span class="math">e = 0</span>).
+        Exactly zero energy (<span class="math">E = 0</span>) corresponds to
+        <span class="math">e = 1</span>, a parabola — the object barely escapes
+        to infinity. Positive energy (<span class="math">E &gt; 0</span>) gives
+        <span class="math">e &gt; 1</span>, a hyperbola, where the object
+        swings around the focus and flies off to infinity on a straight
+        asymptotic path.
+      </p>
+      <p>
+        The marker travels at <em>constant arc-length speed</em> to highlight
+        the shape rather than Kepler dynamics. For hyperbolic orbits only the
+        physical branch (nearest the focus) is drawn; the second branch would
+        require a second, repulsive body.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>
+            Set <span class="math">e = 0</span>: a perfect circle. The
+            distance from the focus to any point on the curve is constant —
+            it equals <span class="math">p</span>.
+          </li>
+          <li>
+            Slowly slide <span class="math">e</span> through
+            <span class="math">0.99 \to 1.00 \to 1.01</span>: watch the
+            closed orbit pop open into a parabola, then into a hyperbola.
+            That transition is a change of sign in total energy.
+          </li>
+          <li>
+            Set <span class="math">e = 1.5</span>: a wide hyperbola — this is
+            the geometry of a gravitational flyby, such as Voyager past
+            Jupiter. The dashed lines show the asymptotes the spacecraft
+            approaches at large distance.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

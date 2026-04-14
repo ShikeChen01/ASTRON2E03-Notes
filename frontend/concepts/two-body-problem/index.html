@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Two-Body Problem — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>The Two-Body Problem</h1>
+      <p class="subtitle">
+        Two masses orbiting their common center of mass — and why it reduces
+        to a single Kepler orbit.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\ddot{\mathbf{r}} = -\frac{GM}{r^3}\mathbf{r}, \quad M = m_1 + m_2</span></p>
+        <p><span class="math-display">\mathbf{R}_{cm} = \frac{m_1 \mathbf{r}_1 + m_2 \mathbf{r}_2}{M}</span></p>
+        <p><span class="math-display">\mu = \frac{m_1 m_2}{m_1 + m_2}</span></p>
+        <p><span class="math-display">r_1 = \frac{m_2}{M} r, \qquad r_2 = \frac{m_1}{M} r</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="orbit" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Mass ratio m₁/m₂
+            <input id="ratio" type="range" min="0.1" max="10" step="0.05" value="1.0" />
+            <span id="ratio-val">1.00</span>
+          </label>
+          <label>
+            Eccentricity (e)
+            <input id="ecc" type="range" min="0" max="0.7" step="0.01" value="0.4" />
+            <span id="ecc-val">0.40</span>
+          </label>
+          <label>
+            Speed
+            <input id="spd" type="range" min="0.2" max="3" step="0.1" value="1.0" />
+            <span id="spd-val">1.0</span>
+          </label>
+          <button id="toggle">Pause</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        Both bodies orbit the <strong>same center of mass</strong> (the small
+        cross at the canvas center). The CoM never accelerates — it is the
+        natural pivot of the system. Each body traces its own ellipse about
+        that point, with the <em>same eccentricity</em> but radii inversely
+        proportional to mass: the heavier body <span class="math">(m_1,
+        \text{yellow})</span> stays close in, while the lighter body
+        <span class="math">(m_2, \text{blue})</span> sweeps the larger orbit.
+      </p>
+      <p>
+        The full two-body dynamics collapse onto a single one-body problem:
+        the <em>relative</em> coordinate <span class="math">\mathbf{r} =
+        \mathbf{r}_2 - \mathbf{r}_1</span> obeys exactly Kepler's equation
+        with total mass <span class="math">M</span>, and the
+        <em>reduced mass</em> <span class="math">\mu = m_1 m_2 / M</span>
+        encodes how much inertia the relative motion feels. This is why
+        standard orbital mechanics textbooks treat the Sun as fixed — in the
+        extreme mass-ratio limit, the Sun's ellipse shrinks to a point.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>
+            Set ratio <strong>1:1</strong>: both bodies trace identical
+            ellipses, always 180° apart. The CoM sits exactly at the midpoint
+            of the segment joining them at every instant.
+          </li>
+          <li>
+            Set ratio <strong>10:1</strong>: the heavy body barely moves; the
+            light body sweeps the big orbit. This is the standard
+            "fixed Sun" approximation used in introductory orbital mechanics.
+          </li>
+          <li>
+            Set ratio <strong>5:1</strong> with <span class="math">e = 0.6</span>:
+            both bodies trace clearly different ellipses, but their perihelion
+            and aphelion timings align perfectly — watch the symmetry around
+            the CoM as they accelerate together near closest approach.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

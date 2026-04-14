@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lagrange Points — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Restricted Three-Body Problem &amp; Lagrange Points</h1>
+      <p class="subtitle">
+        In the rotating frame of two massive bodies, five equilibrium points
+        emerge — three unstable collinear points and two (potentially) stable
+        triangular points.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\mu_2 = \frac{m_2}{m_1 + m_2}</span></p>
+        <p><span class="math-display">L_4,\, L_5: \text{ equilateral triangles with } M_1,\, M_2</span></p>
+        <p><span class="math-display">L_1 \approx R\!\left(1 - \left(\tfrac{\mu_2}{3}\right)^{1/3}\right) \quad L_2 \approx R\!\left(1 + \left(\tfrac{\mu_2}{3}\right)^{1/3}\right)</span></p>
+        <p><span class="math-display">\text{Stability of } L_4, L_5{:}\ \mu_2 < \tfrac{1}{2}\!\left(1 - \sqrt{\tfrac{23}{27}}\right) \approx 0.0385</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="lagrange" width="800" height="600"></canvas>
+        <div class="controls">
+          <label>
+            Mass ratio m&#8322;/m&#8321;
+            <input id="massRatio" type="range" min="0.001" max="0.5" step="0.001" value="0.001" />
+            <span id="ratio-val">0.001</span>
+          </label>
+          <div id="stability-readout" class="stability-readout"></div>
+          <div class="presets">
+            <span class="presets-label">Presets:</span>
+            <button data-mu="0.000003">Sun–Earth</button>
+            <button data-mu="0.00095">Sun–Jupiter</button>
+            <button data-mu="0.0123">Earth–Moon</button>
+            <button data-mu="0.108">Pluto–Charon</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The view is in the <strong>corotating frame</strong> — a reference frame
+        spinning with the two big bodies (M&#8321; yellow, M&#8322; blue) so they
+        appear stationary. In this frame, gravity plus the centrifugal force
+        produce an <em>effective potential</em> with five saddle points and minima:
+        the Lagrange points L1–L5.
+      </p>
+      <p>
+        <strong>L1, L2, L3</strong> (red markers) are collinear with the two
+        masses. All three are <em>unstable saddle points</em> — a spacecraft placed
+        exactly there will drift away unless it fires thrusters to station-keep.
+        JWST orbits the Sun–Earth L2 point (just outside Earth's orbit) using
+        small periodic corrections.
+      </p>
+      <p>
+        <strong>L4 and L5</strong> form equilateral triangles with M&#8321; and
+        M&#8322;. They are <em>stable</em> (green) when the mass ratio is
+        sufficiently lopsided: <span class="math">\mu_2 &lt; 0.0385</span>
+        (Routh's criterion). Jupiter's Trojan asteroids have been trapped at
+        Sun–Jupiter L4 and L5 for billions of years. When
+        <span class="math">\mu_2</span> exceeds 0.0385 the triangular points
+        become unstable too — watch the color change as you drag the slider
+        past that threshold.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>
+            Click <strong>Sun–Earth</strong>: L4 and L5 are green (stable).
+            L2 sits just outside Earth's orbit — JWST lives there with active
+            station-keeping.
+          </li>
+          <li>
+            Click <strong>Pluto–Charon</strong>:
+            <span class="math">\mu_2 \approx 0.108 &gt; 0.0385</span>, so
+            L4 and L5 flip to red (unstable).
+          </li>
+          <li>
+            Slowly drag the slider past 0.0385 — watch L4 and L5 change color
+            exactly at the stability threshold.
+          </li>
+          <li>
+            Try <strong>Sun–Jupiter</strong>: the Trojan swarms at L4/L5 have
+            over a million members — the mass ratio is well within the stable
+            regime.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Three-Body Problem — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Perturbations, Resonances, and the Three-Body Problem</h1>
+      <p class="subtitle">
+        Why the future of three gravitating bodies cannot be predicted by any formula —
+        only by numerical integration, one tiny step at a time.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\ddot{\mathbf{r}}_i = -\sum_{j\neq i} \frac{G m_j (\mathbf{r}_i - \mathbf{r}_j)}{|\mathbf{r}_i - \mathbf{r}_j|^3}</span></p>
+        <p><span class="math-display">\text{No closed-form solution for general } N \geq 3</span></p>
+        <p><span class="math-display">\text{Sensitive dependence: } |\delta\mathbf{r}(t)| \sim |\delta\mathbf{r}(0)| \, e^{\lambda t}</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="three-body" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Perturbation
+            <input id="perturb" type="range" min="0" max="0.05" step="0.001" value="0" />
+            <span id="perturb-val">0.000</span>
+          </label>
+          <label>
+            Speed
+            <input id="spd" type="range" min="0.2" max="3" step="0.1" value="1" />
+            <span id="spd-val">1.0</span>
+          </label>
+          <button id="reset">Reset</button>
+          <button id="toggle">Pause</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        Three bodies of equal mass interact under Newtonian gravity. Each body
+        simultaneously pulls on — and is pulled by — both of the others. The
+        equations of motion are straightforward to write down, but Poincaré proved
+        in 1889 that no general closed-form solution exists: you cannot write a
+        formula that tells you where body 1 will be at time <span class="math">t</span>.
+        The only way forward is numerical integration — advancing tiny time steps
+        and recomputing the forces.
+      </p>
+      <p>
+        The trail fading behind each body illustrates <em>sensitive dependence on
+        initial conditions</em>: increase the perturbation slider even a little and
+        hit Reset. The early paths look nearly identical, then rapidly diverge —
+        exponentially in time. This is the hallmark of deterministic chaos. The
+        Lyapunov exponent <span class="math">\lambda</span> measures how quickly
+        nearby trajectories separate; even <span class="math">|\delta\mathbf{r}(0)| = 0.001</span>
+        blows up to order-unity differences within a few crossing times.
+      </p>
+      <p>
+        Real planetary systems survive long because the planets are well-separated
+        (making close-approach chaos rare) and many near-resonances are avoided or
+        stabilized. Where mean-motion resonances do occur — like Neptune's 3:2
+        resonance with Pluto — careful analysis shows they can lock orbits into
+        stable configurations rather than chaotic ones. But the generic three-body
+        problem has no such guarantee.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>
+            Set perturbation to <strong>0.000</strong> and hit Reset. Let the
+            simulation run for about 30 seconds. Note roughly where the three
+            bodies are.
+          </li>
+          <li>
+            Set perturbation to <strong>0.010</strong> and hit Reset. The initial
+            triangle looks almost the same — but after the same 30 seconds the
+            bodies end up in a completely different configuration.
+          </li>
+          <li>
+            Try perturbation at <strong>0.001</strong>, <strong>0.005</strong>,
+            <strong>0.050</strong>. Watch how the divergence grows faster as the
+            perturbation increases — the Lyapunov exponent is amplifying every
+            difference exponentially.
+          </li>
+          <li>
+            Pause immediately after Reset at perturbation 0. The three bodies start
+            at the vertices of a rotating equilateral triangle — a configuration
+            that is briefly symmetric, then quickly unravels.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

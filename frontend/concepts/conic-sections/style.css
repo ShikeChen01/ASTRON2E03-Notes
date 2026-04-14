@@ -1,0 +1,4 @@
+#conic { aspect-ratio: 8 / 5; }
+.controls span { color: var(--fg); font-variant-numeric: tabular-nums; }
+.orbit-type-label { margin: 0.4rem 0 0; font-size: 1rem; color: var(--fg-muted, #8b949e); }
+.orbit-type-label strong { color: #e6edf3; }

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kepler's Laws — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Kepler's Laws of Planetary Motion</h1>
+      <p class="subtitle">
+        How planets actually move: ellipses, equal areas, and the
+        period–distance relationship.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">T^2 = \frac{4\pi^2}{GM}\,a^3</span></p>
+        <p><span class="math-display">\frac{dA}{dt} = \frac{L}{2m} = \text{const}</span></p>
+        <p><span class="math-display">r(\theta) = \frac{a(1-e^2)}{1 + e\cos\theta}</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="orbit" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Eccentricity (e)
+            <input id="ecc" type="range" min="0" max="0.9" step="0.01" value="0.5" />
+            <span id="ecc-val">0.50</span>
+          </label>
+          <label>
+            Semi-major axis (a, px)
+            <input id="sma" type="range" min="80" max="280" step="1" value="200" />
+            <span id="sma-val">200</span>
+          </label>
+          <label>
+            Speed
+            <input id="spd" type="range" min="0.2" max="3" step="0.1" value="1" />
+            <span id="spd-val">1.0</span>
+          </label>
+          <button id="toggle">Pause</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        <strong>1st law (ellipses):</strong> the orbit is an ellipse with
+        the Sun (yellow dot) at one focus — not the center. As you
+        increase eccentricity <span class="math">e</span>, the ellipse
+        elongates and the focus moves further from the geometric center.
+      </p>
+      <p>
+        <strong>2nd law (equal areas):</strong> the swept-area wedge
+        (purple) accumulates the area covered per unit time. Pause and
+        watch — the planet moves <em>fast</em> near the Sun and
+        <em>slow</em> far from it, exactly so that
+        <span class="math">dA/dt</span> stays constant.
+      </p>
+      <p>
+        <strong>3rd law (T² ∝ a³):</strong> increase
+        <span class="math">a</span> and you can see the period grow
+        nonlinearly — doubling the semi-major axis makes the orbit take
+        roughly <span class="math">2^{1.5} \approx 2.83</span> times
+        longer.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Set <span class="math">e=0</span>: a perfect circle. The
+              speed is constant, the focus and center coincide.</li>
+          <li>Set <span class="math">e=0.9</span>: comet-like. Notice how
+              long the planet lingers at aphelion.</li>
+          <li>Hold <span class="math">e</span> fixed and double
+              <span class="math">a</span>. Time the orbit by eye — it
+              should feel ~2.8× slower.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

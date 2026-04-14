@@ -21,6 +21,20 @@
         <p><span class="math-display">A \le B \le C \quad \text{(principal moments of inertia)}</span></p>
         <p><span class="math-display">J_2 = \frac{C - A}{Ma^2} \quad\text{(dimensionless oblateness parameter)}</span></p>
       </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">I</span></dt><dd>moment of inertia about some axis (depends which axis)</dd>
+          <dt><span class="math">dm</span></dt><dd>infinitesimal mass element inside the body</dd>
+          <dt><span class="math">r</span></dt><dd>perpendicular distance from <span class="math">dm</span> to the chosen axis</dd>
+          <dt><span class="math">M</span></dt><dd>total mass of the planet</dd>
+          <dt><span class="math">R</span></dt><dd>mean radius of the planet</dd>
+          <dt><span class="math">a</span></dt><dd>equatorial radius (largest semi-axis for an oblate body)</dd>
+          <dt><span class="math">A,\, B,\, C</span></dt><dd>principal moments of inertia — the three numbers you get when the axes align with the body's symmetry axes. <span class="math">C</span> is the moment about the polar (rotation) axis; <span class="math">A,\,B</span> are about the two equatorial axes. For a rotationally-symmetric body, <span class="math">A = B</span>.</dd>
+          <dt><span class="math">C/MR^2</span></dt><dd>dimensionless moment-of-inertia factor — how centrally concentrated the mass is. Uniform sphere: <span class="math">0.4</span>. Smaller = more concentrated toward the center.</dd>
+          <dt><span class="math">J_2</span></dt><dd>dimensionless oblateness / quadrupole parameter. Measures how much the body departs from a sphere. Sphere: <span class="math">J_2 = 0</span>.</dd>
+        </dl>
+      </div>
 
       <h2>MacCullagh's formula and surface gravity</h2>
       <p>
@@ -30,6 +44,17 @@
       </p>
       <div class="panel">
         <p><span class="math-display">g(r,\phi) \approx \frac{GM}{r^2} \;-\; \frac{3G(C-A)}{2r^4}\bigl(3\sin^2\phi - 1\bigr)</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">g(r,\phi)</span></dt><dd>gravitational acceleration at distance <span class="math">r</span> from the center and latitude <span class="math">\phi</span></dd>
+          <dt><span class="math">r</span></dt><dd>distance from the planet's center to the point where we measure gravity (outside the body)</dd>
+          <dt><span class="math">\phi</span></dt><dd>latitude — angle above the equatorial plane. <span class="math">\phi = 0</span> at the equator, <span class="math">\pm 90^\circ</span> at the poles.</dd>
+          <dt><span class="math">G</span></dt><dd>Newton's gravitational constant</dd>
+          <dt><span class="math">M</span></dt><dd>planet's total mass</dd>
+          <dt><span class="math">C - A</span></dt><dd>difference of principal moments of inertia — measures the equatorial bulge. Sphere: <span class="math">C - A = 0</span>.</dd>
+        </dl>
       </div>
       <p>
         The first term is plain Newtonian gravity (as if the planet were a
@@ -49,6 +74,14 @@
       </p>
       <div class="panel">
         <p><span class="math-display">g(\phi) = \frac{GM}{r^2} - \frac{3GMa^2}{2r^4}\,J_2\bigl(3\sin^2\phi - 1\bigr) - \omega^2 r\cos^2\phi</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">New variables</span>
+        <dl>
+          <dt><span class="math">a</span></dt><dd>equatorial radius (used as the length scale in <span class="math">J_2</span>)</dd>
+          <dt><span class="math">\omega</span></dt><dd>planet's angular rotation rate in rad/s (Earth: <span class="math">\approx 7.29 \times 10^{-5}</span>)</dd>
+          <dt><span class="math">\omega^2 r\cos^2\phi</span></dt><dd>centripetal acceleration on the rotating surface — maximum at the equator, zero at the poles</dd>
+        </dl>
       </div>
       <p>
         The third term, <span class="math">-\omega^2 r\cos^2\phi</span>, is
@@ -241,6 +274,15 @@
       </p>
       <div class="panel">
         <p><span class="math-display">f = \frac{a - c}{a} \;\approx\; \tfrac{3}{2}J_2 + \tfrac{1}{2}\frac{a^3\omega^2}{GM}</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">f</span></dt><dd>flattening — how squashed the planet is. <span class="math">0</span> = perfect sphere; <span class="math">0.098</span> = Saturn.</dd>
+          <dt><span class="math">a</span></dt><dd>equatorial radius (the big one)</dd>
+          <dt><span class="math">c</span></dt><dd>polar radius (the small one, along the rotation axis)</dd>
+          <dt><span class="math">a^3\omega^2/(GM)</span></dt><dd>dimensionless ratio of centrifugal to gravitational acceleration at the equator</dd>
+        </dl>
       </div>
       <p>
         The first term is the body's own gravitational non-sphericity; the

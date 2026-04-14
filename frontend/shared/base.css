@@ -136,3 +136,37 @@ canvas {
   margin: 1rem 0;
 }
 .try-this h3 { margin-top: 0; color: var(--accent-2); }
+
+/* Variable glossary that accompanies an equation panel. */
+.var-list {
+  margin: 0.5rem 0 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(122, 162, 247, 0.06);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  font-size: 0.92rem;
+}
+.var-list .var-list-title {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.var-list dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 0.9rem;
+  row-gap: 0.25rem;
+}
+.var-list dt {
+  color: var(--accent);
+  font-style: italic;
+  white-space: nowrap;
+}
+.var-list dd {
+  margin: 0;
+  color: var(--fg);
+}

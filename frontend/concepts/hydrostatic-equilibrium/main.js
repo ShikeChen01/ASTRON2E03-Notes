@@ -88,7 +88,7 @@ function draw() {
   roundRect(ctx, DIVIDER + PADDING / 2, PADDING / 2, W - DIVIDER - PADDING, H - PADDING, 8);
   ctx.fill();
 
-  drawPlanet(PADDING / 2, PADDING / 2, DIVIDER - PADDING, H - PADDING, Pc);
+  drawPlanet(PADDING / 2, PADDING / 2, DIVIDER - PADDING, H - PADDING, Pc, R);
   drawGraph(DIVIDER + PADDING / 2, PADDING / 2, W - DIVIDER - PADDING, H - PADDING, Pc);
   drawReadout(M_kg, R_m, rho, Pc);
 }
@@ -109,11 +109,15 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 // ── Left panel: planet cross-section ─────────────────────────────────────────
-function drawPlanet(px, py, pw, ph, Pc) {
+function drawPlanet(px, py, pw, ph, Pc, R_eu) {
   // Usable area inside panel
   const cx = px + pw / 2;
   const cy = py + ph / 2;
-  const maxR = Math.min(pw, ph) / 2 - 16;   // visual radius of planet
+  const frameMax = Math.min(pw, ph) / 2 - 16;  // max room available
+  // Visually scale with slider R (Earth radii). sqrt compression so Mars and
+  // Jupiter both fit on screen: Earth → 30 % of frame, Jupiter (11 Re) → ~99 %.
+  const scale = Math.max(0.08, Math.min(0.95, 0.30 * Math.sqrt(R_eu)));
+  const maxR = frameMax * scale;
 
   // Radial gradient: yellow center → orange → dark blue at surface
   const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
@@ -297,7 +301,20 @@ function drawGraph(px, py, pw, ph, Pc) {
   ctx.font = '12px -apple-system, Segoe UI, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
-  ctx.fillText('Pressure profile', gx + gw / 2, py + 4);
+  ctx.fillText('Pressure profile (shape is universal)', gx + gw / 2, py + 4);
+
+  // Big Pc readout — gives visible feedback when M slider moves
+  const Pc_Mbar = Pc / 1e11;
+  let pcText, pcUnit;
+  if (Pc_Mbar >= 1000)       { pcText = (Pc_Mbar / 1000).toFixed(2); pcUnit = 'Gbar'; }
+  else if (Pc_Mbar >= 0.01)  { pcText = Pc_Mbar.toFixed(2);          pcUnit = 'Mbar'; }
+  else                       { pcText = (Pc_Mbar * 1000).toFixed(2); pcUnit = 'kbar'; }
+
+  ctx.fillStyle = '#ffd166';
+  ctx.font = 'bold 22px -apple-system, Segoe UI, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(`P_c = ${pcText} ${pcUnit}`, gx + gw / 2, gy + gh + 26);
 }
 
 // ── Live readout (top-left of left panel) ─────────────────────────────────────

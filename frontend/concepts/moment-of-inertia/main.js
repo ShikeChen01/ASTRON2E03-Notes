@@ -549,3 +549,260 @@ function drawQuad() {
 }
 
 drawQuad();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Third canvas: monopole / dipole / quadrupole zoo
+// Top row = electric (with ± charges), bottom row = gravity (mass only)
+// ─────────────────────────────────────────────────────────────────────────────
+const multiCanvas = document.getElementById('multipole-canvas');
+const multiCtx    = multiCanvas.getContext('2d');
+
+function drawCharge(cx, cy, sign, radius = 12) {
+  multiCtx.fillStyle = sign > 0 ? '#f7768e' : '#7aa2f7';
+  multiCtx.beginPath();
+  multiCtx.arc(cx, cy, radius, 0, 2 * Math.PI);
+  multiCtx.fill();
+  multiCtx.strokeStyle = '#0d1117';
+  multiCtx.lineWidth = 1.5;
+  multiCtx.stroke();
+  multiCtx.fillStyle = '#0d1117';
+  multiCtx.font = 'bold 16px -apple-system, Segoe UI, sans-serif';
+  multiCtx.textAlign = 'center';
+  multiCtx.textBaseline = 'middle';
+  multiCtx.fillText(sign > 0 ? '+' : '−', cx, cy + 1);
+}
+
+function drawMassDot(cx, cy, radius = 12) {
+  multiCtx.fillStyle = '#ffd166';
+  multiCtx.beginPath();
+  multiCtx.arc(cx, cy, radius, 0, 2 * Math.PI);
+  multiCtx.fill();
+  multiCtx.strokeStyle = '#0d1117';
+  multiCtx.lineWidth = 1.5;
+  multiCtx.stroke();
+  multiCtx.fillStyle = '#0d1117';
+  multiCtx.font = 'bold 13px -apple-system, Segoe UI, sans-serif';
+  multiCtx.textAlign = 'center';
+  multiCtx.textBaseline = 'middle';
+  multiCtx.fillText('M', cx, cy + 1);
+}
+
+function multiArrow(x1, y1, x2, y2, color, width = 1.5) {
+  multiCtx.strokeStyle = color;
+  multiCtx.fillStyle   = color;
+  multiCtx.lineWidth   = width;
+  multiCtx.beginPath();
+  multiCtx.moveTo(x1, y1);
+  multiCtx.lineTo(x2, y2);
+  multiCtx.stroke();
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const head = 5;
+  multiCtx.beginPath();
+  multiCtx.moveTo(x2, y2);
+  multiCtx.lineTo(x2 - head * Math.cos(ang - 0.4), y2 - head * Math.sin(ang - 0.4));
+  multiCtx.lineTo(x2 - head * Math.cos(ang + 0.4), y2 - head * Math.sin(ang + 0.4));
+  multiCtx.closePath();
+  multiCtx.fill();
+}
+
+function drawElectricMonopole(cx, cy, R) {
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * 2 * Math.PI;
+    multiArrow(cx + 18 * Math.cos(a), cy + 18 * Math.sin(a),
+               cx + R * 0.85 * Math.cos(a), cy + R * 0.85 * Math.sin(a),
+               '#bb9af7');
+  }
+  drawCharge(cx, cy, +1, 14);
+}
+
+function drawElectricDipole(cx, cy, R) {
+  const sep = 30;
+  multiCtx.strokeStyle = '#bb9af7';
+  multiCtx.lineWidth = 1.5;
+  const angles = [-1.0, -0.5, 0.5, 1.0];
+  for (const baseA of angles) {
+    multiCtx.beginPath();
+    const x0 = cx - sep + 14 * Math.cos(baseA);
+    const y0 = cy + 14 * Math.sin(baseA);
+    const yOff = 60 * Math.sign(baseA) * (1 - Math.abs(baseA) * 0.4);
+    const cp1x = cx - sep / 2;
+    const cp1y = cy + yOff;
+    const cp2x = cx + sep / 2;
+    const cp2y = cy + yOff;
+    const x1 = cx + sep - 14 * Math.cos(baseA);
+    const y1 = cy + 14 * Math.sin(baseA);
+    multiCtx.moveTo(x0, y0);
+    multiCtx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x1, y1);
+    multiCtx.stroke();
+  }
+  multiArrow(cx - sep + 14, cy, cx + sep - 14, cy, '#bb9af7');
+  drawCharge(cx - sep, cy, +1, 13);
+  drawCharge(cx + sep, cy, -1, 13);
+}
+
+function drawElectricQuadrupole(cx, cy, R) {
+  const s = 30;
+  drawCharge(cx - s, cy - s, +1, 11);
+  drawCharge(cx + s, cy - s, -1, 11);
+  drawCharge(cx - s, cy + s, -1, 11);
+  drawCharge(cx + s, cy + s, +1, 11);
+  const lobeR = R * 0.85;
+  multiArrow(cx + 12, cy - 12, cx + lobeR * 0.7, cy - lobeR * 0.7, '#bb9af7');
+  multiArrow(cx - 12, cy + 12, cx - lobeR * 0.7, cy + lobeR * 0.7, '#bb9af7');
+  multiArrow(cx + 12, cy + 12, cx + lobeR * 0.7, cy + lobeR * 0.7, '#bb9af7');
+  multiArrow(cx - 12, cy - 12, cx - lobeR * 0.7, cy - lobeR * 0.7, '#bb9af7');
+}
+
+function drawGravityMonopole(cx, cy, R) {
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * 2 * Math.PI;
+    multiArrow(cx + R * 0.85 * Math.cos(a), cy + R * 0.85 * Math.sin(a),
+               cx + 22 * Math.cos(a), cy + 22 * Math.sin(a),
+               '#9ece6a');
+  }
+  drawMassDot(cx, cy, 16);
+  multiCtx.fillStyle = '#9ece6a';
+  multiCtx.font = '11px -apple-system, Segoe UI, sans-serif';
+  multiCtx.textAlign = 'center';
+  multiCtx.textBaseline = 'top';
+  multiCtx.fillText('every body has one', cx, cy + R - 6);
+}
+
+function drawGravityDipole(cx, cy, R) {
+  drawMassDot(cx - 30, cy, 14);
+  multiCtx.strokeStyle = '#f7768e';
+  multiCtx.lineWidth = 2;
+  multiCtx.setLineDash([5, 4]);
+  multiCtx.beginPath();
+  multiCtx.arc(cx + 30, cy, 14, 0, 2 * Math.PI);
+  multiCtx.stroke();
+  multiCtx.setLineDash([]);
+  multiCtx.fillStyle = '#f7768e';
+  multiCtx.font = 'bold 12px -apple-system, Segoe UI, sans-serif';
+  multiCtx.textAlign = 'center';
+  multiCtx.textBaseline = 'middle';
+  multiCtx.fillText('−M', cx + 30, cy + 1);
+  multiCtx.font = '10px -apple-system, Segoe UI, sans-serif';
+  multiCtx.fillText('(impossible)', cx + 30, cy + 24);
+
+  multiCtx.fillStyle = '#e6edf3';
+  multiCtx.font = 'bold 36px -apple-system, Segoe UI, sans-serif';
+  multiCtx.textAlign = 'center';
+  multiCtx.textBaseline = 'middle';
+  multiCtx.fillText('= 0', cx, cy - 60);
+  multiCtx.fillStyle = '#8b949e';
+  multiCtx.font = '11px -apple-system, Segoe UI, sans-serif';
+  multiCtx.fillText('(measured from CoM)', cx, cy - 32);
+}
+
+function drawGravityQuadrupole(cx, cy, R) {
+  const a = R * 0.55;
+  const c = R * 0.35;
+
+  multiCtx.fillStyle = '#7aa2f7';
+  multiCtx.beginPath();
+  multiCtx.ellipse(cx, cy, a, c, 0, 0, 2 * Math.PI);
+  multiCtx.fill();
+  multiCtx.strokeStyle = '#30363d';
+  multiCtx.lineWidth = 1.5;
+  multiCtx.beginPath();
+  multiCtx.ellipse(cx, cy, a, c, 0, 0, 2 * Math.PI);
+  multiCtx.stroke();
+
+  multiCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  for (let i = 0; i < 30; i++) {
+    let dx, dy;
+    do {
+      dx = Math.random() * 2 - 1;
+      dy = Math.random() * 2 - 1;
+    } while (dx*dx + dy*dy > 1);
+    multiCtx.beginPath();
+    multiCtx.arc(cx + dx * a, cy + dy * c, 1.2, 0, 2 * Math.PI);
+    multiCtx.fill();
+  }
+
+  const ringR = R * 0.95;
+  for (let i = 0; i < 16; i++) {
+    const ang = (i / 16) * 2 * Math.PI;
+    const px = cx + ringR * Math.cos(ang);
+    const py = cy + ringR * Math.sin(ang);
+    const lat = Math.asin(Math.abs(Math.sin(ang)));
+    const f = 0.4;
+    const J2 = (2*f - f*f) / 5;
+    const r_norm = ringR / a;
+    const monopole = 1 / (r_norm * r_norm);
+    const quad = -(3 * J2) / (2 * Math.pow(r_norm, 4)) * (3 * Math.sin(lat)**2 - 1);
+    const g = monopole + quad;
+    const len = 32 * (g / monopole);
+
+    const dx = (cx - px) / ringR;
+    const dy = (cy - py) / ringR;
+    const ex = px + dx * len;
+    const ey = py + dy * len;
+
+    const t = (g / monopole - 1) * 4;
+    const tC = Math.max(-1, Math.min(1, t));
+    const color = tC >= 0
+      ? `rgb(${Math.round(160 - 60 * tC)}, ${Math.round(200 + 55 * tC)}, 100)`
+      : `rgb(${Math.round(220 + 35 * (-tC))}, 120, 120)`;
+
+    multiArrow(px, py, ex, ey, color, 2);
+  }
+
+  multiCtx.fillStyle = '#9ece6a';
+  multiCtx.font = '11px -apple-system, Segoe UI, sans-serif';
+  multiCtx.textAlign = 'center';
+  multiCtx.textBaseline = 'top';
+  multiCtx.fillText('(C − A) ≠ 0', cx, cy + R - 6);
+}
+
+function drawMultipole() {
+  const W = multiCanvas.width;
+  const H = multiCanvas.height;
+  multiCtx.clearRect(0, 0, W, H);
+
+  const colW = W / 3;
+  const rowH = H / 2;
+
+  drawElectricMonopole(  colW * 0.5, rowH * 0.5, 130);
+  drawElectricDipole(    colW * 1.5, rowH * 0.5, 130);
+  drawElectricQuadrupole(colW * 2.5, rowH * 0.5, 130);
+
+  drawGravityMonopole(  colW * 0.5, rowH * 1.5, 130);
+  drawGravityDipole(    colW * 1.5, rowH * 1.5, 130);
+  drawGravityQuadrupole(colW * 2.5, rowH * 1.5, 130);
+
+  multiCtx.fillStyle = '#e6edf3';
+  multiCtx.font = 'bold 15px -apple-system, Segoe UI, sans-serif';
+  multiCtx.textAlign = 'center';
+  multiCtx.textBaseline = 'top';
+  multiCtx.fillText('Monopole  (1/r²)',   colW * 0.5, 8);
+  multiCtx.fillText('Dipole  (1/r³)',     colW * 1.5, 8);
+  multiCtx.fillText('Quadrupole  (1/r⁴)', colW * 2.5, 8);
+
+  multiCtx.save();
+  multiCtx.translate(14, rowH * 0.5);
+  multiCtx.rotate(-Math.PI / 2);
+  multiCtx.fillStyle = '#8b949e';
+  multiCtx.font = 'bold 13px -apple-system, Segoe UI, sans-serif';
+  multiCtx.textAlign = 'center';
+  multiCtx.textBaseline = 'top';
+  multiCtx.fillText('ELECTRIC  (± charges)', 0, 0);
+  multiCtx.restore();
+
+  multiCtx.save();
+  multiCtx.translate(14, rowH * 1.5);
+  multiCtx.rotate(-Math.PI / 2);
+  multiCtx.fillStyle = '#8b949e';
+  multiCtx.fillText('GRAVITY  (mass only)', 0, 0);
+  multiCtx.restore();
+
+  multiCtx.strokeStyle = '#30363d';
+  multiCtx.lineWidth = 1;
+  multiCtx.beginPath();
+  multiCtx.moveTo(40, rowH);
+  multiCtx.lineTo(W - 10, rowH);
+  multiCtx.stroke();
+}
+
+drawMultipole();

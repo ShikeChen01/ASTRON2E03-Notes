@@ -60,6 +60,66 @@
         the poles.
       </p>
 
+      <h3>What are monopoles, dipoles, and quadrupoles?</h3>
+      <p>
+        These are the simplest possible "source patterns" for a field,
+        ranked by how detailed they are. Any messy charge or mass
+        distribution can be decomposed into a sum of them — far from
+        the source, only the lowest non-zero term matters. Each one
+        decays faster than the last:
+      </p>
+      <ul>
+        <li>
+          <strong>Monopole</strong> — a point source. Field is radially
+          symmetric. Falls off as <span class="math">1/r^2</span>.
+        </li>
+        <li>
+          <strong>Dipole</strong> — a <span class="math">+</span> and a
+          <span class="math">-</span> separated by a small distance. Field
+          has two lobes; falls off as <span class="math">1/r^3</span>.
+        </li>
+        <li>
+          <strong>Quadrupole</strong> — two dipoles back-to-back, or
+          equivalently a <span class="math">++/{-}{-}</span> arrangement.
+          Four lobes; falls off as <span class="math">1/r^4</span>.
+        </li>
+      </ul>
+      <p>
+        The visualization below shows all three. The top row uses electric
+        charges (where you can have both <span class="math">+</span> and
+        <span class="math">-</span>) so you can see what each pattern
+        looks like in its purest form. The bottom row shows the same idea
+        for <em>mass</em>, where there is no "negative mass":
+      </p>
+      <ul>
+        <li>
+          The <strong>gravitational monopole</strong> is just any body's
+          total mass — always present.
+        </li>
+        <li>
+          The <strong>gravitational dipole</strong> is
+          <span class="math">\int \mathbf{r}\,dm</span>, which equals
+          <span class="math">M \mathbf{R}_{cm}</span>. If you put your
+          origin at the center of mass,
+          <span class="math">\mathbf{R}_{cm} = 0</span>, so the
+          dipole moment is exactly zero. <strong>Gravitational dipoles
+          don't exist</strong> in any useful sense.
+        </li>
+        <li>
+          The <strong>gravitational quadrupole</strong> is the
+          <em>second</em> moments of the mass distribution
+          <span class="math">\int r_i r_j\,dm</span> — and those are
+          exactly the moments of inertia
+          <span class="math">A, B, C</span>. So the quadrupole is the
+          first nontrivial correction to the monopole, and it's
+          parameterized by <span class="math">(C-A)</span> for a
+          rotationally-symmetric body.
+        </li>
+      </ul>
+      <div class="panel">
+        <canvas id="multipole-canvas" width="850" height="520"></canvas>
+      </div>
+
       <h3>Visualizing the quadrupole correction</h3>
       <p>
         Drag the oblateness slider below. The blue body deforms from a

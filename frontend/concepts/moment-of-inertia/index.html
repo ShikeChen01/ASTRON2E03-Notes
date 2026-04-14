@@ -60,6 +60,34 @@
         the poles.
       </p>
 
+      <h3>Visualizing the quadrupole correction</h3>
+      <p>
+        Drag the oblateness slider below. The blue body deforms from a
+        sphere to an oblate ellipsoid; the surrounding circle of gold
+        arrows shows the gravitational pull on test particles at a
+        <em>fixed distance from the center</em>, all the way around
+        the planet. For a sphere all arrows are identical (Newton's
+        shell theorem). As the body bulges at the equator, the arrows
+        on the equator side grow longer and the arrows over the poles
+        shrink — exactly the
+        <span class="math">(3\sin^2\phi - 1)</span> pattern in
+        MacCullagh's formula.
+      </p>
+      <div class="panel">
+        <canvas id="quadrupole-canvas" width="800" height="450"></canvas>
+        <div class="controls">
+          <label>
+            Oblateness <span class="math">f = (a-c)/a</span>
+            <input id="quad-f" type="range" min="0" max="0.30" step="0.005" value="0" />
+            <span id="quad-f-val">0.000</span>
+          </label>
+          <label>
+            (vertical = polar axis. Test ring is fixed at
+            <span class="math">r = 1.6\,a</span>, outside the body.)
+          </label>
+        </div>
+      </div>
+
       <h2>Flattening of a fluid body</h2>
       <p>
         For a body that behaves as a fluid (planets are fluid on long

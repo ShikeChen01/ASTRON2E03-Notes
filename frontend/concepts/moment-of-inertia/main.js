@@ -366,3 +366,186 @@ function drawDivider(W, H) {
 
 // ── Initial render ───────────────────────────────────────────────────────────
 draw();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Second canvas: visualizing the quadrupole correction in MacCullagh's formula
+// ─────────────────────────────────────────────────────────────────────────────
+const quadCanvas = document.getElementById('quadrupole-canvas');
+const quadCtx    = quadCanvas.getContext('2d');
+const quadFInput = document.getElementById('quad-f');
+const quadFVal   = document.getElementById('quad-f-val');
+
+let qf = parseFloat(quadFInput.value);
+
+quadFInput.addEventListener('input', () => {
+  qf = parseFloat(quadFInput.value);
+  quadFVal.textContent = qf.toFixed(3);
+  drawQuad();
+});
+
+/**
+ * MacCullagh gravitational acceleration at distance r and latitude φ
+ * (radians from equator), in normalized units where GM=1, a=1.
+ *
+ *   g(r, φ) = GM/r² − (3·G·(C−A) / (2 r⁴)) · (3 sin²φ − 1)
+ *
+ * For a uniform-density oblate spheroid with equatorial radius a, polar c:
+ *   C − A = (1/5) M (a² − c²)
+ * Setting M=1, a=1 and c = 1−f:
+ *   (C − A) = (1 − (1−f)²) / 5  =  (2f − f²) / 5
+ */
+function macCullagh(r, phi, f) {
+  const CmA = (2*f - f*f) / 5;     // (C − A)/M  in units where a=1
+  const monopole = 1 / (r*r);
+  const quad = -(3 * CmA) / (2 * Math.pow(r, 4)) * (3 * Math.sin(phi)**2 - 1);
+  return monopole + quad;
+}
+
+function drawQuad() {
+  const W = quadCanvas.width;
+  const H = quadCanvas.height;
+  quadCtx.clearRect(0, 0, W, H);
+
+  const cx = W / 2;
+  const cy = H / 2;
+  const aPx = 90;                 // equatorial radius in pixels (a = 1 in our units)
+  const cPx = aPx * (1 - qf);     // polar radius
+  const ringR = aPx * 1.6;        // test-particle ring (outside the body)
+
+  // Body fill
+  quadCtx.fillStyle = '#7aa2f7';
+  quadCtx.beginPath();
+  quadCtx.ellipse(cx, cy, aPx, cPx, 0, 0, 2 * Math.PI);
+  quadCtx.fill();
+  quadCtx.strokeStyle = '#30363d';
+  quadCtx.lineWidth = 1.5;
+  quadCtx.beginPath();
+  quadCtx.ellipse(cx, cy, aPx, cPx, 0, 0, 2 * Math.PI);
+  quadCtx.stroke();
+
+  // Test-ring outline (faint)
+  quadCtx.strokeStyle = '#30363d';
+  quadCtx.lineWidth = 1;
+  quadCtx.setLineDash([3, 4]);
+  quadCtx.beginPath();
+  quadCtx.arc(cx, cy, ringR, 0, 2 * Math.PI);
+  quadCtx.stroke();
+  quadCtx.setLineDash([]);
+
+  // Compute gravity at every angle around the ring; remember min/max for color
+  const N = 24;
+  const samples = [];
+  let minG = Infinity, maxG = -Infinity;
+  for (let i = 0; i < N; i++) {
+    const theta = (i / N) * 2 * Math.PI;          // angle from +x in screen coords
+    const phi   = Math.PI/2 - theta;              // latitude (radians) — pole at theta=π/2 and 3π/2
+    // We measure r in normalized units (a = 1), so r/a = ringR/aPx = 1.6
+    const r_norm = ringR / aPx;
+    const g = macCullagh(r_norm, Math.abs(Math.PI/2 - Math.abs(theta - Math.PI/2)), qf);
+    // Easier: latitude is angle above the equator. Equator on canvas is at theta=0 or π (horizontal).
+    // Pole is at theta=π/2 or 3π/2 (vertical). So latitude = arcsin(|sin(theta)|).
+    const lat = Math.asin(Math.abs(Math.sin(theta)));
+    const gPhys = macCullagh(r_norm, lat, qf);
+    samples.push({ theta, gPhys });
+    if (gPhys < minG) minG = gPhys;
+    if (gPhys > maxG) maxG = gPhys;
+  }
+
+  // Draw arrows
+  const baseLen = 60;  // px when g = 1 (monopole baseline)
+  for (const s of samples) {
+    const px = cx + ringR * Math.cos(s.theta);
+    const py = cy + ringR * Math.sin(s.theta);
+    const len = baseLen * s.gPhys;
+    // arrow points INWARD (toward center)
+    const dx = (cx - px) / ringR;
+    const dy = (cy - py) / ringR;
+    const ex = px + dx * len;
+    const ey = py + dy * len;
+
+    // color: stronger than monopole = brighter, weaker = dimmer
+    const t = (s.gPhys - 1) * 30;     // amplify deviation
+    const tClamped = Math.max(-1, Math.min(1, t));
+    let color;
+    if (tClamped >= 0) {
+      // green-ish for stronger
+      const v = Math.round(150 + 105 * tClamped);
+      color = `rgb(${255 - 50 * tClamped}, ${v}, 100)`;
+    } else {
+      // red-ish for weaker
+      const v = Math.round(150 + 105 * (-tClamped));
+      color = `rgb(${v + 50}, ${100}, ${100})`;
+    }
+
+    quadCtx.strokeStyle = color;
+    quadCtx.lineWidth = 2.5;
+    quadCtx.beginPath();
+    quadCtx.moveTo(px, py);
+    quadCtx.lineTo(ex, ey);
+    quadCtx.stroke();
+
+    // arrowhead
+    const headSize = 6;
+    const ang = Math.atan2(dy, dx);
+    quadCtx.fillStyle = color;
+    quadCtx.beginPath();
+    quadCtx.moveTo(ex, ey);
+    quadCtx.lineTo(ex - headSize * Math.cos(ang - 0.4), ey - headSize * Math.sin(ang - 0.4));
+    quadCtx.lineTo(ex - headSize * Math.cos(ang + 0.4), ey - headSize * Math.sin(ang + 0.4));
+    quadCtx.closePath();
+    quadCtx.fill();
+  }
+
+  // Mass-element dots inside the body — illustrate where mass lives
+  const dotCount = 60;
+  quadCtx.fillStyle = 'rgba(255,255,255,0.55)';
+  for (let i = 0; i < dotCount; i++) {
+    // Sample uniformly inside the ellipse
+    let dx, dy;
+    do {
+      dx = (Math.random() * 2 - 1);
+      dy = (Math.random() * 2 - 1);
+    } while (dx * dx + dy * dy > 1);
+    quadCtx.beginPath();
+    quadCtx.arc(cx + dx * aPx, cy + dy * cPx, 1.4, 0, 2 * Math.PI);
+    quadCtx.fill();
+  }
+
+  // Axis labels
+  quadCtx.fillStyle = '#8b949e';
+  quadCtx.font = '12px -apple-system, Segoe UI, sans-serif';
+  quadCtx.textAlign = 'center';
+  quadCtx.textBaseline = 'bottom';
+  quadCtx.fillText('N pole (φ = 90°)', cx, cy - ringR - 14);
+  quadCtx.textBaseline = 'top';
+  quadCtx.fillText('S pole (φ = −90°)', cx, cy + ringR + 6);
+  quadCtx.textAlign = 'right';
+  quadCtx.textBaseline = 'middle';
+  quadCtx.fillText('equator (φ = 0)', cx - ringR - 8, cy);
+  quadCtx.textAlign = 'left';
+  quadCtx.fillText('equator', cx + ringR + 8, cy);
+
+  // Numeric readout
+  const J2 = (2*qf - qf*qf) / 5;     // J₂ in units a=1, M=1
+  const r_norm = ringR / aPx;
+  const gPole = macCullagh(r_norm, Math.PI / 2, qf);
+  const gEq   = macCullagh(r_norm, 0, qf);
+  const monopole = 1 / (r_norm * r_norm);
+
+  quadCtx.fillStyle = '#e6edf3';
+  quadCtx.font = '13px -apple-system, Segoe UI, sans-serif';
+  quadCtx.textAlign = 'left';
+  quadCtx.textBaseline = 'top';
+  quadCtx.fillText(`f = ${qf.toFixed(3)}`, 14, 14);
+  quadCtx.fillText(`J₂ = (C−A)/(Ma²) = ${J2.toFixed(4)}`, 14, 32);
+  quadCtx.fillText(`g_monopole = GM/r² = ${monopole.toFixed(4)}`, 14, 56);
+  quadCtx.fillStyle = '#9ece6a';
+  quadCtx.fillText(`g_equator = ${gEq.toFixed(4)}   (+${((gEq/monopole - 1)*100).toFixed(2)}%)`, 14, 74);
+  quadCtx.fillStyle = '#f7768e';
+  quadCtx.fillText(`g_pole    = ${gPole.toFixed(4)}   (${((gPole/monopole - 1)*100).toFixed(2)}%)`, 14, 92);
+
+  quadCtx.fillStyle = '#8b949e';
+  quadCtx.fillText('All arrows measured at the same distance r = 1.6 a from center.', 14, H - 22);
+}
+
+drawQuad();

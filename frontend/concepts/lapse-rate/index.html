@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adiabatic Lapse Rate — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Adiabatic Lapse Rate</h1>
+      <p class="subtitle">
+        Rising air does work against gravity, cools adiabatically, and sets the
+        threshold between stable and convective atmospheres.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\Gamma_d = -\frac{dT}{dz} = \frac{g}{c_p}</span></p>
+        <p><span class="math-display">\Gamma_d(\text{Earth, dry}) \approx \frac{9.81}{1005} \approx 9.8\,\text{K\,km}^{-1}</span></p>
+        <p><span class="math-display">\text{Stability: } \Gamma_{\rm env} < \Gamma_d \Rightarrow \text{STABLE}; \quad \Gamma_{\rm env} > \Gamma_d \Rightarrow \text{UNSTABLE (convective)}</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">\Gamma_d</span></dt><dd>dry adiabatic lapse rate — temperature decrease per unit altitude for a dry rising parcel (K km<sup>-1</sup>)</dd>
+          <dt><span class="math">T</span></dt><dd>temperature of the air parcel (K)</dd>
+          <dt><span class="math">z</span></dt><dd>altitude above the reference level (km)</dd>
+          <dt><span class="math">g</span></dt><dd>surface gravity of the planet (m s<sup>-2</sup>); Earth: 9.81 m s<sup>-2</sup>, Jupiter: 23 m s<sup>-2</sup></dd>
+          <dt><span class="math">c_p</span></dt><dd>specific heat capacity at constant pressure of the atmosphere (J kg<sup>-1</sup> K<sup>-1</sup>); dry air: 1005, H<sub>2</sub>: ~14 300, CO<sub>2</sub>: ~736–850</dd>
+          <dt><span class="math">\Gamma_{\rm env}</span></dt><dd>environmental (actual) lapse rate — slope of the ambient temperature profile (K km<sup>-1</sup>)</dd>
+          <dt><span class="math">\Gamma_{\rm moist}</span></dt><dd>moist adiabatic lapse rate — reduced lapse rate (~5–7 K km<sup>-1</sup>) due to latent heat released by condensation</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="lapse-canvas" width="820" height="480"></canvas>
+        <div class="controls">
+          <label>
+            Surface temperature T<sub>s</sub> (K)
+            <input id="t-surf" type="range" min="200" max="320" step="1" value="288" />
+            <span id="t-surf-val">288</span>
+          </label>
+          <label>
+            Gravity g (m/s²)
+            <input id="gravity" type="range" min="1" max="30" step="0.01" value="9.81" />
+            <span id="gravity-val">9.81</span>
+          </label>
+          <label>
+            c<sub>p</sub> (J kg<sup>-1</sup> K<sup>-1</sup>)
+            <input id="cp" type="range" min="500" max="15000" step="10" value="1005" />
+            <span id="cp-val">1005</span>
+          </label>
+          <label>
+            Environmental lapse &Gamma;<sub>env</sub> (K/km)
+            <input id="gamma-env" type="range" min="0" max="15" step="0.1" value="6.5" />
+            <span id="gamma-env-val">6.5</span>
+          </label>
+          <label>
+            Moist lapse &Gamma;<sub>moist</sub> (K/km)
+            <input id="gamma-moist" type="range" min="4" max="8" step="0.1" value="6.0" />
+            <span id="gamma-moist-val">6.0</span>
+          </label>
+          <div class="preset-buttons">
+            <button id="btn-earth">Earth</button>
+            <button id="btn-jupiter">Jupiter</button>
+            <button id="btn-mars">Mars</button>
+            <button id="btn-venus">Venus</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The plot shows temperature (horizontal) vs. altitude (vertical, 0–20 km).
+        The <strong style="color:#f7768e;">red dry adiabat</strong> is the
+        temperature a <em>dry</em> rising parcel would have at each altitude —
+        it cools at exactly <span class="math">\Gamma_d = g/c_p</span>.
+        The <strong style="color:#7aa2f7;">blue moist adiabat</strong> is shallower
+        because condensation releases latent heat, partially counteracting the
+        adiabatic cooling.
+        The <strong style="color:#9ece6a;">green dashed line</strong> is the
+        environmental (background) temperature profile — what the surrounding
+        atmosphere actually does.
+      </p>
+      <p>
+        Stability is determined by comparing the environmental lapse rate to the
+        dry adiabat. When a parcel is displaced upward:
+        if it ends up <em>cooler</em> than its surroundings (env slope is shallow,
+        <span class="math">\Gamma_{\rm env} &lt; \Gamma_d</span>), it sinks back —
+        the atmosphere is <strong style="color:#9ece6a;">STABLE</strong>.
+        If it ends up <em>warmer</em> than its surroundings
+        (<span class="math">\Gamma_{\rm env} &gt; \Gamma_d</span>), it keeps rising
+        — <strong style="color:#f7768e;">UNSTABLE, convective</strong>.
+        The shaded region between the two profiles visualises which regime applies.
+      </p>
+      <p>
+        Changing the planet preset rescales <span class="math">g</span> and
+        <span class="math">c_p</span>, directly shifting the dry adiabat slope.
+        Jupiter's hydrogen atmosphere has an enormous <span class="math">c_p</span>,
+        making its dry adiabat surprisingly shallow (~1.8 K km<sup>-1</sup>).
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Press <strong>Jupiter</strong>: gravity is 2.3× Earth's but H<sub>2</sub>
+              has <span class="math">c_p \approx 14\,300</span>, so
+              <span class="math">\Gamma_d \approx 1.8\,\text{K km}^{-1}</span> — far
+              shallower than Earth's 9.8 K km<sup>-1</sup>.</li>
+          <li>Drag <strong>&Gamma;<sub>env</sub></strong> below <span class="math">\Gamma_d</span>
+              and watch the shading flip from red (unstable) to green (stable).</li>
+          <li>Compare <strong>Mars</strong> vs <strong>Venus</strong>: similar CO<sub>2</sub>
+              atmospheres but very different gravity, giving different
+              <span class="math">\Gamma_d</span>.</li>
+          <li>Raise <strong>T<sub>s</sub></strong> to 735 K (Venus surface) and see
+              the profile shift far to the right.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

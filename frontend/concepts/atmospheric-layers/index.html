@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thermal Structure &amp; Atmospheric Layers — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Thermal Structure &amp; Atmospheric Layers</h1>
+      <p class="subtitle">
+        Planetary atmospheres are divided into distinct layers by the sign of
+        <span class="math">dT/dz</span> — gravity, radiation, and chemistry each
+        dominate in different altitude regimes.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p>
+          <strong>Hydrostatic equilibrium</strong>
+          <span class="math-display">\frac{dP}{dz} = -\rho g</span>
+        </p>
+        <p>
+          <strong>Dry adiabatic lapse rate (troposphere)</strong>
+          <span class="math-display">\frac{dT}{dz} = -\frac{g}{c_p} \approx -9.8\,\text{K\,km}^{-1}\;\text{(Earth dry)},\quad -6.5\,\text{K\,km}^{-1}\;\text{(moist)}</span>
+        </p>
+        <p>
+          <strong>Effective emission level (radiative equilibrium)</strong>
+          <span class="math-display">\tau \approx \tfrac{2}{3} \quad\Rightarrow\quad T_{\rm eff} = T(\tau = 2/3)</span>
+        </p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">P</span></dt><dd>atmospheric pressure (Pa or bar)</dd>
+          <dt><span class="math">\rho</span></dt><dd>atmospheric mass density (kg m<sup>-3</sup>)</dd>
+          <dt><span class="math">g</span></dt><dd>surface gravity (m s<sup>-2</sup>)</dd>
+          <dt><span class="math">T</span></dt><dd>temperature (K)</dd>
+          <dt><span class="math">z</span></dt><dd>altitude above the surface (km)</dd>
+          <dt><span class="math">c_p</span></dt><dd>specific heat at constant pressure (J kg<sup>-1</sup> K<sup>-1</sup>)</dd>
+          <dt><span class="math">\tau</span></dt><dd>optical depth; photons escape freely when <span class="math">\tau \lesssim 2/3</span></dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="atm-canvas" width="820" height="520"></canvas>
+        <div class="controls">
+          <div class="preset-buttons">
+            <button id="btn-earth" class="active">Earth</button>
+            <button id="btn-mars">Mars</button>
+            <button id="btn-venus">Venus</button>
+            <button id="btn-jupiter">Jupiter</button>
+            <button id="btn-titan">Titan</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The plot shows the canonical temperature–altitude (or temperature–pressure
+        for Jupiter) profile for the selected body. The
+        <strong style="color:#7aa2f7;">blue troposphere</strong> is convectively
+        controlled and cools with altitude following approximately the moist or
+        dry adiabat. The
+        <strong style="color:#ffd166;">orange stratosphere</strong> warms with
+        altitude because ozone (Earth/Venus/Titan) or hydrocarbon aerosols
+        (giant planets) absorb UV and near-UV radiation. The
+        <strong style="color:#bb9af7;">purple mesosphere</strong> cools again
+        as the absorbing species become too thin. The
+        <strong style="color:#f7768e;">red thermosphere</strong> rises sharply
+        due to direct absorption of solar UV and X-rays by O, O<sub>2</sub>, and N<sub>2</sub>.
+      </p>
+      <p>
+        Dashed horizontal lines mark the
+        <em>tropopause</em>, <em>stratopause</em>, and <em>mesopause</em> — the
+        turning points where <span class="math">dT/dz</span> changes sign.
+        On giant planets there is no ozone, so the stratosphere is heated
+        instead by CH<sub>4</sub> photolysis and aerosol absorption; the
+        tropopause sits near ~0.1 bar.
+      </p>
+      <p>
+        The readout box (top-left of the canvas) shows the surface (or 1 bar)
+        temperature, tropopause temperature and altitude, and the peak
+        thermosphere temperature where applicable.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Switch to <strong>Jupiter</strong>: the y-axis becomes log-pressure
+              and there is no mesosphere — above the tropopause the temperature
+              climbs monotonically due to hydrocarbon and aerosol UV absorption.</li>
+          <li>Compare <strong>Venus</strong> and <strong>Earth</strong>: Venus has
+              a much hotter surface (735 K vs 288 K) but a similar tropopause
+              temperature (~175 K vs ~217 K) because its dense CO<sub>2</sub>
+              atmosphere radiates efficiently at altitude.</li>
+          <li>Notice that <strong>Mars</strong> has no separate stratospheric
+              warming layer — its thin atmosphere has negligible UV absorption,
+              so the profile just has a troposphere and a gentle thermosphere.</li>
+          <li>On <strong>Titan</strong>, the tropopause is near 40 km at ~70 K,
+              but the stratosphere warms to ~170 K at 200 km due to its thick
+              haze absorbing UV.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

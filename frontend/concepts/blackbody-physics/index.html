@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blackbody Physics — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Blackbody Physics</h1>
+      <p class="subtitle">A perfect absorber and emitter whose spectrum depends only on temperature — the foundation of stellar astrophysics.</p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">B_\nu(T) = \frac{2h\nu^3}{c^2} \cdot \frac{1}{e^{h\nu/kT}-1}</span></p>
+        <p><span class="math-display">B_\lambda(T) = \frac{2hc^2}{\lambda^5} \cdot \frac{1}{e^{hc/\lambda kT}-1}</span></p>
+        <p><span class="math-display">\lambda_\text{max} \cdot T = 2.898 \times 10^{-3}\ \text{m·K}</span></p>
+        <p><span class="math-display">F = \sigma T^4, \quad \sigma = 5.67 \times 10^{-8}\ \text{W m}^{-2}\ \text{K}^{-4}</span></p>
+        <p><span class="math-display">L = 4\pi R^2 \sigma T^4</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">B_\nu(T)</span></dt><dd>spectral radiance per unit frequency (W m⁻² Hz⁻¹ sr⁻¹)</dd>
+          <dt><span class="math">B_\lambda(T)</span></dt><dd>spectral radiance per unit wavelength (W m⁻² m⁻¹ sr⁻¹)</dd>
+          <dt><span class="math">T</span></dt><dd>temperature of the blackbody (K)</dd>
+          <dt><span class="math">\nu</span></dt><dd>frequency of radiation (Hz)</dd>
+          <dt><span class="math">\lambda</span></dt><dd>wavelength of radiation (m)</dd>
+          <dt><span class="math">h</span></dt><dd>Planck's constant, <span class="math">6.626 \times 10^{-34}</span> J·s</dd>
+          <dt><span class="math">c</span></dt><dd>speed of light, <span class="math">3 \times 10^8</span> m s⁻¹</dd>
+          <dt><span class="math">k</span></dt><dd>Boltzmann's constant, <span class="math">1.381 \times 10^{-23}</span> J K⁻¹</dd>
+          <dt><span class="math">\lambda_\text{max}</span></dt><dd>peak wavelength from Wien's displacement law (m)</dd>
+          <dt><span class="math">F</span></dt><dd>total flux radiated per unit surface area (W m⁻²)</dd>
+          <dt><span class="math">\sigma</span></dt><dd>Stefan–Boltzmann constant, <span class="math">5.67 \times 10^{-8}</span> W m⁻² K⁻⁴</dd>
+          <dt><span class="math">L</span></dt><dd>total luminosity of a sphere of radius <span class="math">R</span> (W)</dd>
+          <dt><span class="math">R</span></dt><dd>radius of the emitting sphere (m)</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="bb-canvas" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>Temperature (K)
+            <input id="temp" type="range" min="100" max="10000" step="50" value="5778" />
+            <span id="temp-val">5778</span>
+          </label>
+          <div class="preset-row">
+            <button id="btn-sun">Sun 5778 K</button>
+            <button id="btn-earth">Earth 288 K</button>
+            <button id="btn-jupiter">Jupiter 125 K</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The log-log plot shows the Planck spectral radiance <span class="math">B_\lambda(T)</span> versus wavelength.
+        The highlighted curve (purple) is the current temperature; faint grey curves show the Sun, Earth, and Jupiter for comparison.
+        The dashed vertical line marks Wien's peak <span class="math">\lambda_\text{max}</span> — it shifts left (bluer, shorter wavelength) as temperature rises and right (redder, longer) as it falls.
+        The shaded band (0.38–0.75 µm) is the human visible range: hot stars peak there or in the UV, while planets peak deep in the infrared.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Drag the slider to ~3000 K (a red dwarf or incandescent bulb) and notice how little of the emission falls in the visible band — most energy is wasted as heat.</li>
+          <li>Click "Earth 288 K" and observe that the peak is around 10 µm (far-IR), which is why greenhouse gases absorbing at those wavelengths are so important for climate.</li>
+          <li>Compare Sun and Jupiter: the Sun's curve towers far above Jupiter's — even normalised, the peak is 40× hotter and the flux goes as <span class="math">T^4</span>, so it is billions of times more luminous per unit area.</li>
+          <li>Push the slider to 10 000 K (a hot A-type star) and watch the peak move into the UV, explaining why such stars appear blue-white.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

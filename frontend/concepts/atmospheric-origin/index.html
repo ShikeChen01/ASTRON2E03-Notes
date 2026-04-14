@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Atmospheric Origin &amp; Secondary Atmospheres — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Atmospheric Origin &amp; Secondary Atmospheres</h1>
+      <p class="subtitle">How terrestrial planets acquire, lose, and chemically sculpt their atmospheres — and how isotopic forensics tell the story.</p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><strong>Urey / Carbonate-Silicate reaction</strong></p>
+        <p><span class="math-display">\text{MgSiO}_3 + \text{CO}_2 \;\rightleftharpoons\; \text{MgCO}_3 + \text{SiO}_2</span></p>
+        <p><strong>D/H ratio diagnostic</strong></p>
+        <p><span class="math-display">\frac{(\text{D/H})_\text{Venus}}{(\text{D/H})_\text{Earth}} \approx 150</span></p>
+        <p><strong>Isotopic fractionation (Rayleigh)</strong></p>
+        <p><span class="math-display">\frac{N_\text{light}}{N_\text{heavy}} \propto e^{-t/\tau_\text{esc}}</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables &amp; markers</span>
+        <dl>
+          <dt>MgSiO<sub>3</sub></dt><dd>enstatite (silicate mineral in crustal rock)</dd>
+          <dt>MgCO<sub>3</sub></dt><dd>magnesite (carbonate — CO<sub>2</sub> locked into rock)</dd>
+          <dt>D/H</dt><dd>deuterium-to-hydrogen ratio; enrichment implies preferential loss of light H</dd>
+          <dt><span class="math">^{36}\text{Ar}</span> / <span class="math">^{40}\text{Ar}</span></dt><dd>primordial vs. radiogenic argon ratio; traces outgassing history</dd>
+          <dt><span class="math">^{22}\text{Ne}/^{20}\text{Ne}</span></dt><dd>neon isotope ratio; fingerprints nebular vs. cometary delivery</dd>
+          <dt><span class="math">\tau_\text{esc}</span></dt><dd>escape timescale for light isotopologue (s)</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="ao-canvas" width="820" height="480"></canvas>
+        <div class="controls">
+          <div id="qty-buttons">
+            <button class="qty-btn active" data-qty="co2">Show CO<sub>2</sub> inventory</button>
+            <button class="qty-btn" data-qty="n2">Show N<sub>2</sub></button>
+            <button class="qty-btn" data-qty="h2o">Show H<sub>2</sub>O</button>
+            <button class="qty-btn" data-qty="dh">Show D/H</button>
+            <button class="qty-btn" data-qty="ar">Show Ar isotopes</button>
+          </div>
+          <button id="urey-toggle">Show Urey cycle</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The canvas shows three columns — <strong style="color:#f7768e">Venus</strong>,
+        <strong style="color:#9ece6a">Earth</strong>,
+        <strong style="color:#7aa2f7">Mars</strong> — each with a horizontal bar
+        proportional (log-scaled) to the selected atmospheric quantity.
+        <em>Numeric annotations</em> appear next to each bar so you can compare orders of magnitude
+        even when bars would be too short to see.
+      </p>
+      <p>
+        All three rocky planets outgassed similar CO<sub>2</sub> budgets from their interiors.
+        Earth's secret is the <strong>carbonate-silicate (Urey) cycle</strong>: rain dissolves CO<sub>2</sub>
+        into carbonic acid, which weathers silicate rock into carbonate minerals.
+        Subduction returns that carbonate to the mantle; volcanism re-releases the CO<sub>2</sub>
+        — a long-period thermostat. Venus lost its liquid water early
+        and therefore lost the cycle, leaving 92 bar of CO<sub>2</sub> in its atmosphere.
+        Mars lost both water and plate tectonics.
+      </p>
+      <p>
+        <strong>Isotopic forensics:</strong> Venus's D/H ratio is ~150× Earth's, because
+        UV photodissociation of water preferentially allows light H to escape to space while
+        deuterium (D) stays behind. Mars's D/H (~5× Earth) tells a smaller but similar story.
+        Noble-gas ratios (<sup>36</sup>Ar/<sup>40</sup>Ar, <sup>22</sup>Ne/<sup>20</sup>Ne) distinguish
+        primordial nebular gas, outgassed interior volatiles, and late cometary/asteroidal delivery.
+      </p>
+      <p>
+        <strong>Three sources of secondary atmospheres:</strong>
+        (1) <em>Outgassing</em> — volcanism releases CO<sub>2</sub>, H<sub>2</sub>O, N<sub>2</sub>, SO<sub>2</sub> from the interior;
+        (2) <em>Late delivery</em> — cometary/asteroidal impacts during the Late Heavy Bombardment (~3.9 Ga) contributed volatiles;
+        (3) <em>Primordial (nebular)</em> — direct H<sub>2</sub>/He capture from the solar nebula, retained only by gas giants.
+        Terrestrial planet atmospheres are therefore <em>secondary</em>: outgassed + delivered + chemically processed.
+      </p>
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Click <strong>Show CO<sub>2</sub> inventory</strong>: Venus has 92 bar, Earth 0.0004 bar, Mars 0.006 bar — yet the raw outgassed budgets were similar. The Urey cycle explains the difference.</li>
+          <li>Switch to <strong>Show H<sub>2</sub>O</strong>: Earth holds ~3000 m ocean equivalent. Venus and Mars are nearly dry today.</li>
+          <li>Switch to <strong>Show D/H</strong>: Venus's extreme enrichment (~100× Earth) is a fossil record of a lost ocean.</li>
+          <li>Toggle <strong>Show Urey cycle</strong> to see the carbonate-silicate loop that acts as Earth's long-term CO<sub>2</sub> thermostat.</li>
+          <li>Switch to <strong>Show Ar isotopes</strong>: high <sup>40</sup>Ar/<sup>36</sup>Ar on Earth signals intense outgassing from <sup>40</sup>K decay; the pattern differs on Venus and Mars.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

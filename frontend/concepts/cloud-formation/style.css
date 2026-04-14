@@ -1,0 +1,52 @@
+/* cloud-formation */
+
+.subtitle {
+  color: #8b949e;
+  margin-top: -0.4rem;
+  margin-bottom: 1.4rem;
+  font-size: 1rem;
+}
+
+#cf-canvas {
+  display: block;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto 1rem;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.preset-buttons button {
+  padding: 0.3rem 0.9rem;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  background: #161b22;
+  color: #e6edf3;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.preset-buttons button:hover {
+  background: #1f2937;
+  border-color: #7aa2f7;
+  color: #7aa2f7;
+}
+
+.preset-buttons button.active {
+  background: #1c2a3a;
+  border-color: #7aa2f7;
+  color: #7aa2f7;
+  font-weight: 600;
+}
+
+.var-list dt {
+  font-weight: 600;
+  color: #bb9af7;
+}

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Atmospheric Escape — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Atmospheric Escape</h1>
+      <p class="subtitle">Why some worlds keep their air and others lose it — from Jeans escape to hydrodynamic blowoff.</p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">v_\text{esc} = \sqrt{\dfrac{2GM}{R}}</span></p>
+        <p><span class="math-display">v_m = \sqrt{\dfrac{2kT}{m}}</span></p>
+        <p><span class="math-display">f(v) = 4\pi\!\left(\frac{m}{2\pi kT}\right)^{\!3/2} v^2 \exp\!\left(-\frac{mv^2}{2kT}\right)</span></p>
+        <p><span class="math-display">\text{Jeans criterion: escape significant when } v_\text{esc} \lesssim 3\,v_m</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">v_\text{esc}</span></dt><dd>escape velocity from the planetary surface (km s<sup>−1</sup>)</dd>
+          <dt><span class="math">G</span></dt><dd>gravitational constant, <span class="math">6.674 \times 10^{-11}</span> N m² kg<sup>−2</sup></dd>
+          <dt><span class="math">M</span></dt><dd>planetary mass (kg)</dd>
+          <dt><span class="math">R</span></dt><dd>planetary radius (m)</dd>
+          <dt><span class="math">v_m</span></dt><dd>most probable thermal speed from Maxwell–Boltzmann distribution (km s<sup>−1</sup>)</dd>
+          <dt><span class="math">k</span></dt><dd>Boltzmann constant, <span class="math">1.381 \times 10^{-23}</span> J K<sup>−1</sup></dd>
+          <dt><span class="math">T</span></dt><dd>temperature of the exosphere (K)</dd>
+          <dt><span class="math">m</span></dt><dd>mass of one molecule (kg = atomic mass × <span class="math">1.6605 \times 10^{-27}</span> kg)</dd>
+          <dt><span class="math">v</span></dt><dd>molecular speed (m s<sup>−1</sup>) — integration variable</dd>
+          <dt><span class="math">f(v)</span></dt><dd>Maxwell–Boltzmann probability density (s m<sup>−1</sup>); <span class="math">\int f(v)\,dv = 1</span></dd>
+          <dt><span class="math">3\,v_m</span></dt><dd>rule-of-thumb threshold — species with <span class="math">3 v_m &gt; v_\text{esc}</span> escapes rapidly</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="ae-canvas" width="860" height="420"></canvas>
+        <div class="controls">
+          <label>
+            Species
+            <select id="species">
+              <option value="1">H (1 u)</option>
+              <option value="2" selected>H₂ (2 u)</option>
+              <option value="4">He (4 u)</option>
+              <option value="16">CH₄ (16 u)</option>
+              <option value="28">N₂ (28 u)</option>
+              <option value="32">O₂ (32 u)</option>
+              <option value="44">CO₂ (44 u)</option>
+            </select>
+          </label>
+          <label>
+            Temperature T (K): <span id="T-val">1000</span> K
+            <input id="T-slider" type="range" min="50" max="2000" step="10" value="1000" />
+          </label>
+          <label>
+            Planet (left panel v<sub>esc</sub>)
+            <select id="planet">
+              <option value="moon">Moon (2.4 km/s)</option>
+              <option value="mars">Mars (5.0 km/s)</option>
+              <option value="venus">Venus (10.4 km/s)</option>
+              <option value="earth" selected>Earth (11.2 km/s)</option>
+              <option value="jupiter">Jupiter (59.5 km/s)</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The <strong>left panel</strong> shows the Maxwell–Boltzmann speed distribution
+        <span class="math">f(v)</span> for the selected species and temperature.
+        The dashed vertical line marks the planet's escape velocity <span class="math">v_\text{esc}</span>;
+        the area under the curve to its right (shaded red) is the Jeans escape fraction —
+        the fraction of molecules in the high-velocity tail that already exceed escape speed.
+        A second dashed line marks the most probable speed <span class="math">v_m</span>.
+      </p>
+      <p>
+        The <strong>right panel</strong> is a horizontal bar chart of <span class="math">v_\text{esc}</span>
+        for five solar-system bodies. The thin vertical rule shows <span class="math">3\,v_m</span> for the
+        currently selected species and temperature. Bars are <span style="color:#9ece6a">green</span> (retains),
+        <span style="color:#f7768e">red</span> (escapes rapidly), or
+        <span style="color:#ffd166">yellow</span> (leaks slowly).
+      </p>
+      <p>
+        Jeans escape preferentially removes light isotopes, leaving heavier ones behind.
+        The very high D/H ratio on Venus is a fingerprint of massive ancient water loss:
+        hydrogen escaped faster than deuterium, enriching the residual atmosphere in the heavy
+        isotope. Beyond Jeans escape, stellar XUV radiation can drive <strong>hydrodynamic escape</strong>
+        (a bulk atmospheric wind), observed via Ly&alpha; and He&nbsp;10830&nbsp;&Aring; transit absorption.
+        Other loss mechanisms — photodissociation, charge exchange, polar wind, ion sputtering —
+        become important for low-gravity bodies and are sensitive to stellar activity.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Select <strong>H₂ at 900 K</strong>. The readout should show 3·v<sub>m</sub> ≈ 11.8 km/s — just above Earth's v<sub>esc</sub> of 11.2 km/s. Watch the red tail grow and the verdict flip to "ESCAPES".</li>
+          <li>Switch planet to <strong>Jupiter</strong>. Even atomic H at 2000 K keeps 3·v<sub>m</sub> well below 59.5 km/s. Jupiter retains everything.</li>
+          <li>Try <strong>He on Mars</strong> (T = 300 K). Mars's thin atmosphere and low gravity make it vulnerable to helium loss — borne out by Mars's depleted noble-gas inventory.</li>
+          <li>Raise T to 2000 K and step through species from H to CO₂. Notice how quickly the tail fraction collapses as molecular mass increases — isotopic fractionation in action.</li>
+          <li>Compare <strong>Moon vs Mars</strong> for N₂. The Moon's v<sub>esc</sub> is so low that essentially all nitrogen escapes, explaining why the Moon has no stable atmosphere.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

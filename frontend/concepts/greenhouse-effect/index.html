@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Greenhouse Effect — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>The Greenhouse Effect &amp; Radiative Transfer</h1>
+      <p class="subtitle">How IR-absorbing gases warm a planet's surface — visualised with the N-layer slab model.</p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">T_s = T_\text{eq}\,(N+1)^{1/4}</span></p>
+        <p><span class="math-display">\tau = \int \kappa_\nu \,\rho \,dz</span></p>
+        <p><span class="math-display">T_\text{eq} = T_\star\sqrt{\frac{R_\star}{2a}}\,(1-A_B)^{1/4}</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">T_s</span></dt><dd>planet surface temperature (K)</dd>
+          <dt><span class="math">T_\text{eq}</span></dt><dd>bare-rock equilibrium temperature with no atmosphere (K)</dd>
+          <dt><span class="math">N</span></dt><dd>number of perfectly IR-opaque atmospheric layers</dd>
+          <dt><span class="math">\tau</span></dt><dd>optical depth — dimensionless measure of IR opacity along a path</dd>
+          <dt><span class="math">\kappa_\nu</span></dt><dd>mass absorption coefficient at frequency <span class="math">\nu</span> (m² kg<sup>−1</sup>)</dd>
+          <dt><span class="math">\rho</span></dt><dd>atmospheric mass density (kg m<sup>−3</sup>)</dd>
+          <dt><span class="math">z</span></dt><dd>altitude (m)</dd>
+          <dt><span class="math">T_\star</span></dt><dd>stellar effective surface temperature (K)</dd>
+          <dt><span class="math">R_\star</span></dt><dd>stellar radius (m)</dd>
+          <dt><span class="math">a</span></dt><dd>orbital semi-major axis (m or AU)</dd>
+          <dt><span class="math">A_B</span></dt><dd>Bond albedo (fraction of incident light reflected, 0–1)</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="gh-canvas" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Atmospheric layers <em>N</em> = <span id="lbl-N">1</span>
+            <input type="range" id="sl-N" min="0" max="4" step="1" value="1" />
+          </label>
+          <label>
+            Bare-rock <em>T</em><sub>eq</sub> = <span id="lbl-Teq">255</span> K
+            <input type="range" id="sl-Teq" min="100" max="400" step="1" value="255" />
+          </label>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The diagram shows a cross-section of the atmosphere from the ground (bottom) to space (top).
+        Each coloured slab is a perfectly IR-opaque atmospheric layer; darker slabs are cooler, brighter slabs are warmer.
+        <strong>Orange/yellow arrows</strong> are thermal IR fluxes (<span class="math">\sigma T^4</span>).
+        Every layer absorbs all IR from below and re-emits equally upward and downward — this trapping is what raises <span class="math">T_s</span>.
+      </p>
+      <p>
+        The <strong>yellow arrow</strong> from the sun symbol penetrates all layers to the surface, showing that
+        visible light passes through greenhouse gases unimpeded.
+        The <strong>right panel</strong> shows the resulting surface temperature and compares it to Earth's observed
+        mean (288 K) and Venus's observed surface temperature (735 K).
+      </p>
+      <p>
+        Earth's <span class="math">T_\text{eq} \approx 255\,\text{K}</span>;
+        with roughly one effective greenhouse layer the model gives <span class="math">\approx 303\,\text{K}</span>,
+        close to the observed 288 K. Doubling CO<sub>2</sub> contributes roughly 3.7 W m<sup>−2</sup>
+        of radiative forcing, equivalent to about 1–2 K of additional warming.
+      </p>
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Increase <em>N</em> from 0 to 4 and watch the surface temperature climb as <span class="math">(N+1)^{1/4}</span>.</li>
+          <li>Set <em>N</em> = 0. The surface temperature equals <span class="math">T_\text{eq}</span> — no greenhouse warming at all.</li>
+          <li>Lower <em>T</em><sub>eq</sub> to 232 K (Venus's bare-rock value) and crank <em>N</em> up — see how many layers it takes to reach Venus's actual 735 K surface temperature.</li>
+          <li>Note the "greenhouse excess" <span class="math">T_s - T_\text{eq}</span>: it grows faster as <em>N</em> increases because each extra layer adds proportionally less, yet the absolute excess keeps rising.</li>
+          <li>Set <em>T</em><sub>eq</sub> = 255 K and <em>N</em> = 1 — this is the simplest single-slab model of Earth, giving <span class="math">\approx 303</span> K.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

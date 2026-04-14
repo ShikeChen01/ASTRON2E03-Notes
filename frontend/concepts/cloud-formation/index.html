@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cloud Formation &amp; Phase Transitions — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Cloud Formation &amp; Phase Transitions</h1>
+      <p class="subtitle">
+        When rising air cools below the local saturation vapor pressure, gas
+        condenses — forming cloud decks whose altitude and composition depend on
+        the atmospheric temperature–pressure profile and the volatile species present.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\frac{dP_{\rm sat}}{dT} = \frac{L \, P_{\rm sat}}{R_{\rm sp} \, T^2}</span></p>
+        <p><span class="math-display">P_{\rm sat}(T) = P_{\rm ref} \exp\!\left[-\frac{L M}{R}\left(\frac{1}{T} - \frac{1}{T_{\rm ref}}\right)\right]</span></p>
+        <p><span class="math-display">\text{Cloud forms where} \quad P_{\rm vapor}(T) \geq P_{\rm sat}(T)</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">P_{\rm sat}(T)</span></dt><dd>saturation vapor pressure — the partial pressure at which a species is in equilibrium between gas and condensed phase (bar)</dd>
+          <dt><span class="math">L</span></dt><dd>latent heat of condensation (or sublimation) per unit mass (J kg<sup>-1</sup>); e.g., H<sub>2</sub>O: 2.26 &times; 10<sup>6</sup>, CO<sub>2</sub>: 5.73 &times; 10<sup>5</sup></dd>
+          <dt><span class="math">M</span></dt><dd>molar mass of the condensing species (kg mol<sup>-1</sup>)</dd>
+          <dt><span class="math">R</span></dt><dd>universal gas constant, 8.314 J mol<sup>-1</sup> K<sup>-1</sup></dd>
+          <dt><span class="math">R_{\rm sp} = R/M</span></dt><dd>specific gas constant for the species (J kg<sup>-1</sup> K<sup>-1</sup>)</dd>
+          <dt><span class="math">T</span></dt><dd>temperature (K)</dd>
+          <dt><span class="math">T_{\rm ref},\, P_{\rm ref}</span></dt><dd>reference temperature and saturation pressure used to anchor the Clausius–Clapeyron curve</dd>
+          <dt><span class="math">P_{\rm vapor}</span></dt><dd>actual partial pressure of the volatile species in the atmosphere (bar)</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="cf-canvas" width="860" height="500"></canvas>
+        <div class="controls">
+          <div class="preset-buttons" id="planet-buttons">
+            <button id="btn-earth"   class="active">Earth</button>
+            <button id="btn-venus">Venus</button>
+            <button id="btn-mars">Mars</button>
+            <button id="btn-jupiter">Jupiter</button>
+            <button id="btn-titan">Titan</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The diagram shows a log-log Temperature–Pressure plot.
+        Each coloured curve is the Clausius–Clapeyron saturation curve for one
+        volatile species: wherever the curve lies, a parcel of atmosphere at that
+        (T, P) point is <em>exactly</em> at the condensation threshold.
+        Above (higher pressure) and to the left (lower temperature) of a curve the
+        species is in the <em>condensed</em> phase; below and to the right it is
+        vapour.
+      </p>
+      <p>
+        The thick white diagonal line is the selected planet's atmospheric
+        temperature–pressure profile, running from the surface (lower-right) up
+        to the top of the troposphere (upper-left).
+        A <strong style="color:#ffd166;">yellow star</strong> marks every crossing
+        with a saturation curve — these are the cloud-deck altitudes.
+        The readout panel on the right lists the inferred cloud species and their
+        approximate deck temperature and pressure.
+      </p>
+      <p>
+        Different planets have very different profile slopes and volatile inventories,
+        which is why cloud compositions vary so dramatically: Earth has H<sub>2</sub>O
+        water clouds, Venus has sulphuric-acid droplets at ~60 km, Mars sports
+        CO<sub>2</sub> ice hazes, Jupiter has three layered cloud decks (NH<sub>3</sub>,
+        NH<sub>4</sub>SH, H<sub>2</sub>O), and Titan has liquid-methane rain.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Click <strong>Jupiter</strong>: notice how the steep, cool profile
+              crosses three saturation curves in succession, producing the
+              NH<sub>3</sub>, NH<sub>4</sub>SH proxy, and H<sub>2</sub>O decks
+              predicted by models.</li>
+          <li>Compare <strong>Mars</strong> and <strong>Earth</strong>: both have
+              H<sub>2</sub>O curves, but on Mars the cold, low-pressure profile also
+              crosses the CO<sub>2</sub> saturation curve, explaining dry-ice polar
+              caps and hazes.</li>
+          <li>Click <strong>Venus</strong>: the profile is so hot that only H<sub>2</sub>SO<sub>4</sub>
+              (which condenses at ~600 K / 1 bar) is crossed in the middle
+              atmosphere, matching the observed cloud layer at 45–70 km.</li>
+          <li>Click <strong>Titan</strong>: the cold, dense profile passes through
+              the CH<sub>4</sub> saturation curve, consistent with methane rainclouds
+              near 8 km altitude.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

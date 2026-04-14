@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Winds: Coriolis, Hadley Cells, Zonal Bands — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Winds: Coriolis, Hadley Cells, Zonal Bands</h1>
+      <p class="subtitle">How planetary rotation sculpts atmospheric circulation — from Coriolis deflection to Hadley cells and Jupiter's striped jets.</p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\vec{a}_c = -2\,\vec{\Omega} \times \vec{v}</span></p>
+        <p><span class="math-display">Ro = \frac{U}{2\,\Omega\,L}</span></p>
+        <p><span class="math-display">v = \frac{1}{2\,\rho\,\omega\sin\phi}\,\frac{\partial P}{\partial x}</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">\vec{a}_c</span></dt><dd>Coriolis acceleration (m s⁻²); deflects right in N hemisphere, left in S</dd>
+          <dt><span class="math">\vec{\Omega}</span></dt><dd>planetary rotation vector, pointing along spin axis (rad s⁻¹)</dd>
+          <dt><span class="math">\vec{v}</span></dt><dd>velocity of the air parcel in the rotating frame (m s⁻¹)</dd>
+          <dt><span class="math">Ro</span></dt><dd>Rossby number — ratio of inertial to Coriolis forces; Earth ≈ 0.1, Jupiter ≈ 30</dd>
+          <dt><span class="math">U</span></dt><dd>characteristic wind speed (m s⁻¹)</dd>
+          <dt><span class="math">L</span></dt><dd>characteristic length scale of the flow (m)</dd>
+          <dt><span class="math">v</span></dt><dd>geostrophic wind speed — pressure-balanced zonal flow (m s⁻¹)</dd>
+          <dt><span class="math">\rho</span></dt><dd>air density (kg m⁻³)</dd>
+          <dt><span class="math">\phi</span></dt><dd>latitude (rad); <span class="math">\sin\phi</span> gives the local vertical component of <span class="math">\Omega</span></dd>
+          <dt><span class="math">\partial P/\partial x</span></dt><dd>horizontal pressure gradient force per unit volume (Pa m⁻¹)</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="wc-canvas" width="860" height="420"></canvas>
+        <div class="controls">
+          <label>
+            Rotation rate Ω: <span id="omega-val">1.0</span> (arb. units)
+            <input id="omega-slider" type="range" min="0.1" max="5" step="0.05" value="1.0" />
+          </label>
+          <label>
+            Parcel speed U: <span id="speed-val">1.5</span> (arb. units)
+            <input id="speed-slider" type="range" min="0.1" max="5" step="0.05" value="1.5" />
+          </label>
+          <div class="btn-row">
+            <button id="btn-hemi">Hemisphere: N</button>
+            <button id="btn-venus">Venus (slow)</button>
+            <button id="btn-earth">Earth (medium)</button>
+            <button id="btn-jupiter">Jupiter (fast)</button>
+            <button id="btn-reset">Reset trail</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The <strong>left panel</strong> shows a top-down view of a rotating planet (pole at centre).
+        An air parcel is launched from a fixed starting point and — in the <em>inertial frame</em> —
+        would travel in a straight line. In the <em>rotating frame</em> the Coriolis acceleration
+        <span class="math">-2\vec{\Omega}\times\vec{v}</span> curves that path to the
+        <strong>right in the Northern hemisphere</strong> (Ω pointing toward you) and to the
+        <strong>left in the Southern hemisphere</strong> (Ω pointing away).
+        The parcel traces a circle of radius <span class="math">v/(2\Omega)</span> — the inertial
+        oscillation circle. The Rossby number <span class="math">Ro</span> tells you whether rotation
+        dominates (<span class="math">Ro \ll 1</span>, geostrophic regime) or inertia dominates
+        (<span class="math">Ro \gg 1</span>, free-flow regime).
+      </p>
+      <p>
+        The <strong>right panel</strong> shows how the number of Hadley-type circulation cells per
+        hemisphere scales with rotation rate.
+        A <strong>slow rotator</strong> like Venus (very low Ω) develops one giant overturning cell
+        — warm air rises near the equator, flows poleward aloft, and sinks at the poles.
+        At Earth's rotation rate the flow breaks into three cells per hemisphere: the tropical
+        <em>Hadley cell</em>, the mid-latitude <em>Ferrel cell</em>, and the <em>polar cell</em>.
+        A <strong>fast rotator</strong> like Jupiter hosts many narrow zonal bands: bright zones
+        (rising air) alternate with dark belts (sinking air), separated by zonal jets that are
+        Kelvin–Helmholtz unstable at their boundaries. The schematic updates automatically as you
+        drag the Ω slider.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Click <strong>Venus (slow)</strong>. Ω is very small — the Rossby number shoots above 1 ("inertia-dominated") and the right panel shows a single Hadley cell. The parcel barely curves.</li>
+          <li>Click <strong>Earth (medium)</strong>. Ro drops below 1 ("rotation-dominated"), three cells appear on the right, and the parcel traces a tight inertial circle on the left.</li>
+          <li>Click <strong>Jupiter (fast)</strong>. Ω is large, Ro → 0, many zonal bands fill the right panel, and the parcel spirals very tightly.</li>
+          <li>Toggle <strong>N / S hemisphere</strong>. Watch the curved trail flip handedness — rightward deflection in the north, leftward in the south.</li>
+          <li>Drag Ω and U independently. Notice that increasing U <em>widens</em> the inertial circle (radius ∝ U/Ω) while increasing Ω <em>tightens</em> it. The Ro readout captures both effects.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

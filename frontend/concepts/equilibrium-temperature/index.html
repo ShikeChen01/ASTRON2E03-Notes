@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Equilibrium Temperature — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Equilibrium Temperature</h1>
+      <p class="subtitle">How a planet's distance, albedo, and host-star luminosity set its expected surface temperature — absent any greenhouse effect.</p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">S = \frac{L_\star}{4\pi a^2}</span></p>
+        <p><span class="math-display">T_\text{eq} = T_\star \sqrt{\frac{R_\star}{2a}}\,(1 - A_B)^{1/4}</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">S</span></dt><dd>stellar flux at distance <span class="math">a</span> (W m<sup>−2</sup>)</dd>
+          <dt><span class="math">L_\star</span></dt><dd>stellar luminosity (W)</dd>
+          <dt><span class="math">a</span></dt><dd>orbital semi-major axis (m or AU)</dd>
+          <dt><span class="math">T_\text{eq}</span></dt><dd>planet equilibrium temperature (K)</dd>
+          <dt><span class="math">T_\star</span></dt><dd>stellar effective surface temperature (K)</dd>
+          <dt><span class="math">R_\star</span></dt><dd>stellar radius (m)</dd>
+          <dt><span class="math">A_B</span></dt><dd>Bond albedo (fraction of incident light reflected, 0–1)</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="teq-canvas" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Luminosity <span id="lbl-L">1.00</span> L<sub>☉</sub>
+            <input type="range" id="sl-L" min="-2" max="2" step="0.01" value="0" />
+          </label>
+          <label>
+            Distance <span id="lbl-a">1.00</span> AU
+            <input type="range" id="sl-a" min="0.1" max="50" step="0.05" value="1" />
+          </label>
+          <label>
+            Bond albedo A<sub>B</sub> <span id="lbl-AB">0.30</span>
+            <input type="range" id="sl-AB" min="0" max="0.9" step="0.01" value="0.30" />
+          </label>
+          <label>
+            Stellar T<sub>★</sub> <span id="lbl-Ts">5778</span> K
+            <input type="range" id="sl-Ts" min="3000" max="10000" step="10" value="5778" />
+          </label>
+          <div class="preset-row">
+            <button data-preset="mercury">Mercury</button>
+            <button data-preset="venus">Venus</button>
+            <button data-preset="earth">Earth</button>
+            <button data-preset="mars">Mars</button>
+            <button data-preset="jupiter">Jupiter</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The <strong>left panel</strong> shows a schematic of the star–planet system.
+        The yellow circle is the star (scaled to <span class="math">R_\star</span>); the dashed arc is the orbit at distance
+        <span class="math">a</span>; and the filled dot is the planet, colour-coded by <span class="math">T_\text{eq}</span>
+        (blue ≈ 100 K → white ≈ 273 K → orange ≈ 400 K → red &gt; 500 K).
+      </p>
+      <p>
+        The <strong>right panel</strong> is a horizontal bar chart of <span class="math">T_\text{eq}</span> for the five
+        Solar System presets plus your current slider setting. Dashed reference lines mark 273 K (water ice point)
+        and 373 K (water boiling point at 1 atm).
+      </p>
+      <p>
+        Earth's equilibrium temperature (~255 K) is ~33 K below its observed mean surface temperature of ~288 K —
+        the greenhouse excess. Venus sits at ~232 K yet roasts at 735 K, the most dramatic runaway greenhouse in the Solar System.
+      </p>
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Move the distance slider outward. Notice how <span class="math">T_\text{eq}</span> falls as <span class="math">a^{-1/2}</span> and the planet dot cools through blue.</li>
+          <li>Crank albedo to 0.9 (like a snow-covered world). How cold does Earth get?</li>
+          <li>Select <strong>Venus</strong> then slowly lower A<sub>B</sub> toward 0 — watch the equilibrium temperature climb toward what surface instruments actually measure.</li>
+          <li>Increase <span class="math">T_\star</span> to 10 000 K (an A-type star). Where does Earth's orbit land on the temperature chart now?</li>
+          <li>Find the distance at which your custom planet sits right on the 273 K ice line.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

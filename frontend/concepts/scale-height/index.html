@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hydrostatic Atmosphere &amp; Scale Height — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Hydrostatic Atmosphere &amp; Scale Height</h1>
+      <p class="subtitle">How quickly pressure falls with altitude depends on T, gravity, and molecular mass.</p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\frac{dP}{dz} = -\rho g, \quad P = \frac{\rho R T}{\mu_m}</span></p>
+        <p><span class="math-display">P(z) = P_0\, e^{-z/H}, \quad H = \frac{kT}{mg} = \frac{R T}{\mu_m\, g}</span></p>
+        <p><span class="math-display">\text{Column mass per m}^2 = \rho_0 H = \frac{P_0}{g}</span></p>
+      </div>
+      <div class="var-list">
+        <span class="var-list-title">Variables</span>
+        <dl>
+          <dt><span class="math">P</span></dt><dd>atmospheric pressure (Pa)</dd>
+          <dt><span class="math">\rho</span></dt><dd>atmospheric mass density (kg m<sup>−3</sup>)</dd>
+          <dt><span class="math">z</span></dt><dd>altitude above reference level (m or km)</dd>
+          <dt><span class="math">g</span></dt><dd>surface gravitational acceleration (m s<sup>−2</sup>)</dd>
+          <dt><span class="math">R</span></dt><dd>universal gas constant, <span class="math">8.314</span> J mol<sup>−1</sup> K<sup>−1</sup></dd>
+          <dt><span class="math">T</span></dt><dd>temperature (K) — assumed constant (isothermal)</dd>
+          <dt><span class="math">\mu_m</span></dt><dd>mean molar mass of the atmosphere (kg mol<sup>−1</sup>)</dd>
+          <dt><span class="math">H</span></dt><dd>scale height — altitude over which pressure drops by factor <span class="math">e</span> (km)</dd>
+          <dt><span class="math">k</span></dt><dd>Boltzmann constant, <span class="math">1.381 \times 10^{-23}</span> J K<sup>−1</sup></dd>
+          <dt><span class="math">m</span></dt><dd>mean mass of one molecule (kg)</dd>
+          <dt><span class="math">P_0</span></dt><dd>pressure at reference altitude <span class="math">z = 0</span> (Pa)</dd>
+          <dt><span class="math">\rho_0</span></dt><dd>density at reference altitude <span class="math">z = 0</span> (kg m<sup>−3</sup>)</dd>
+        </dl>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="sh-canvas" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>Temperature T (K) <input id="T" type="range" min="50" max="1000" step="1" value="255" /><span id="T-val">255</span></label>
+          <label>Gravity g (m/s²) <input id="g" type="range" min="1" max="30" step="0.1" value="9.81" /><span id="g-val">9.81</span></label>
+          <label>Mean mol mass μ_m (g/mol) <input id="mu" type="range" min="2" max="50" step="0.1" value="29" /><span id="mu-val">29.0</span></label>
+          <div class="preset-row">
+            <button id="btn-earth">Earth</button>
+            <button id="btn-venus">Venus</button>
+            <button id="btn-mars">Mars</button>
+            <button id="btn-jupiter">Jupiter</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The <strong>left panel</strong> shows a semi-log plot of <span class="math">P(z)/P_0 = e^{-z/H}</span>
+        versus altitude in km. Because the y-axis is logarithmic the exponential decay becomes a straight line;
+        the slope is steeper (faster pressure drop) for smaller scale heights.
+        Faint grey reference curves show Earth, Venus, Mars, and Jupiter for comparison.
+        Dashed horizontal lines mark multiples of the current <span class="math">H</span>.
+      </p>
+      <p>
+        The <strong>right panel</strong> is a cartoon atmospheric column. The blue glow represents air density —
+        bright and opaque at the base, fading to nothing over roughly 5 scale heights. A taller, more transparent
+        column means a larger <span class="math">H</span>.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Switch to Jupiter. Notice how <span class="math">H</span> jumps to ~26 km despite Jupiter's strong gravity — its hydrogen atmosphere is so light that each molecule weighs far less, so the pressure gradient is gentler.</li>
+          <li>Drag T up to 1000 K while keeping Earth's g and μ. How does the column cartoon change? What does that imply about a heated exoplanet losing its atmosphere?</li>
+          <li>Compare Venus and Mars: similar <span class="math">\mu_m</span> (CO₂-dominated), but very different T and g. Which effect dominates the scale height difference?</li>
+          <li>Read off <span class="math">P(10\,\text{km})/P_0</span> for Earth's preset (~0.26). This roughly matches real aviation altitude data.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

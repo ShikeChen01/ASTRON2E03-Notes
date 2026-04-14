@@ -18,9 +18,76 @@
       <h2>Key equations</h2>
       <div class="panel">
         <p><span class="math-display">I = \int r^2\,dm, \quad C/MR^2 \in [0,\, 0.4]</span></p>
-        <p><span class="math-display">J_2 = \frac{C - A}{Ma^2}</span></p>
-        <p><span class="math-display">f = \frac{a - c}{a} \approx \tfrac{3}{2}J_2 + \tfrac{1}{2}\frac{a^3\omega^2}{GM}</span></p>
+        <p><span class="math-display">A \le B \le C \quad \text{(principal moments of inertia)}</span></p>
+        <p><span class="math-display">J_2 = \frac{C - A}{Ma^2} \quad\text{(dimensionless oblateness parameter)}</span></p>
       </div>
+
+      <h2>MacCullagh's formula and surface gravity</h2>
+      <p>
+        For a slightly non-spherical body, the gravitational acceleration
+        outside the body has a small correction proportional to
+        <span class="math">(C - A)</span>. This is MacCullagh's formula:
+      </p>
+      <div class="panel">
+        <p><span class="math-display">g(r,\phi) \approx \frac{GM}{r^2} \;-\; \frac{3G(C-A)}{2r^4}\bigl(3\sin^2\phi - 1\bigr)</span></p>
+      </div>
+      <p>
+        The first term is plain Newtonian gravity (as if the planet were a
+        point mass). The second is the correction from oblateness: it falls
+        off as <span class="math">1/r^4</span> (faster than gravity itself),
+        so it matters most close to the planet. The latitude factor
+        <span class="math">(3\sin^2\phi - 1)</span> is
+        <span class="math">+2</span> at the poles and
+        <span class="math">-1</span> at the equator — so a flattened planet
+        pulls slightly <em>harder</em> at the poles than at the equator,
+        purely from its shape.
+      </p>
+      <p>
+        On the rotating surface, you also subtract the centripetal
+        contribution. Replacing <span class="math">(C-A)</span> with
+        <span class="math">J_2 M a^2</span> and adding the rotation term:
+      </p>
+      <div class="panel">
+        <p><span class="math-display">g(\phi) = \frac{GM}{r^2} - \frac{3GMa^2}{2r^4}\,J_2\bigl(3\sin^2\phi - 1\bigr) - \omega^2 r\cos^2\phi</span></p>
+      </div>
+      <p>
+        The third term, <span class="math">-\omega^2 r\cos^2\phi</span>, is
+        the "centrifugal lightening": rotation eats some of gravity to keep
+        you moving in a circle. Maximum at the equator
+        (<span class="math">\cos^2 0 = 1</span>), zero at the poles. On
+        Earth, the combined oblateness + centrifugal effect makes you weigh
+        about <span class="math">0.5\%</span> less at the equator than at
+        the poles.
+      </p>
+
+      <h2>Flattening of a fluid body</h2>
+      <p>
+        For a body that behaves as a fluid (planets are fluid on long
+        timescales), hydrostatic equilibrium picks an oblate shape with
+        flattening
+      </p>
+      <div class="panel">
+        <p><span class="math-display">f = \frac{a - c}{a} \;\approx\; \tfrac{3}{2}J_2 + \tfrac{1}{2}\frac{a^3\omega^2}{GM}</span></p>
+      </div>
+      <p>
+        The first term is the body's own gravitational non-sphericity; the
+        second is the centrifugal contribution (the dimensionless quantity
+        <span class="math">a^3\omega^2/(GM)</span> is the ratio of
+        centrifugal to gravitational acceleration at the equator). Saturn
+        rotates fast and has low density, so this ratio is large —
+        <span class="math">f_{\text{Saturn}} \approx 0.098</span>, visible
+        through any telescope. Earth:
+        <span class="math">f \approx 0.0034</span>; Jupiter:
+        <span class="math">\approx 0.065</span>.
+      </p>
+      <p>
+        The Darwin–Radau relation lets you invert this: measure
+        <span class="math">f</span> and <span class="math">J_2</span> from
+        satellite tracking, and you can extract
+        <span class="math">C/MR^2</span> — which then pins down the
+        interior density profile. That's how Earth's
+        <span class="math">0.3308</span> was originally determined.
+      </p>
 
       <h2>Interactive demo</h2>
       <div class="panel">

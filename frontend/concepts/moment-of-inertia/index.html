@@ -153,6 +153,58 @@
         with a subtle but real 4-lobe deviation.
       </p>
 
+      <h3>But wait — where are A and C in the picture?</h3>
+      <p>
+        A and C are <strong>not two bodies</strong>, and not two points on
+        the planet. They are two <em>numbers</em> — scalars — that summarize
+        the mass distribution of <strong>one single planet</strong>,
+        computed about two different axes drawn through its center:
+      </p>
+      <ul>
+        <li>
+          <strong><span class="math">C</span></strong> = moment of inertia
+          about the <strong>polar (rotation) axis</strong>. For each mass
+          element <span class="math">dm</span> inside the planet, measure
+          its perpendicular distance to the polar axis (call it
+          <span class="math">s</span>) and sum
+          <span class="math">s^2\,dm</span> over the whole body.
+        </li>
+        <li>
+          <strong><span class="math">A</span></strong> = moment of inertia
+          about an <strong>equatorial axis</strong> (any axis through the
+          center lying in the equatorial plane). Same recipe, but measure
+          distance to that axis instead.
+        </li>
+      </ul>
+      <p>
+        So <span class="math">C</span> and <span class="math">A</span> live
+        on the <em>same</em> planet — they are two different ways of
+        weighting the same mass distribution.
+      </p>
+      <p>
+        <strong>Why is <span class="math">C \ge A</span> for an oblate
+        planet?</strong> The equatorial bulge pushes mass <em>far</em> from
+        the polar axis (so those chunks contribute a lot to
+        <span class="math">C</span>), but that same bulge sits <em>right
+        next to</em> the equatorial axis (so it contributes very little to
+        <span class="math">A</span>). More bulge → bigger
+        <span class="math">C - A</span> → bigger
+        <span class="math">J_2</span> → bigger quadrupole correction in
+        MacCullagh's formula.
+      </p>
+      <div class="panel">
+        <canvas id="axes-canvas" width="800" height="380"></canvas>
+      </div>
+      <p>
+        The canvas above uses the same oblateness slider as the next
+        visualization. Drag it and watch the distances change: as the
+        planet flattens, the sample mass element in the equatorial bulge
+        sits <em>farther</em> from the polar axis but <em>closer</em> to
+        the equatorial axis — so <span class="math">C</span> grows,
+        <span class="math">A</span> shrinks slightly, and
+        <span class="math">C - A</span> opens up.
+      </p>
+
       <h3>Visualizing the quadrupole correction</h3>
       <p>
         Drag the oblateness slider below. The blue body deforms from a

@@ -381,6 +381,7 @@ quadFInput.addEventListener('input', () => {
   qf = parseFloat(quadFInput.value);
   quadFVal.textContent = qf.toFixed(3);
   drawQuad();
+  drawAxes();
 });
 
 /**
@@ -549,6 +550,175 @@ function drawQuad() {
 }
 
 drawQuad();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Axes canvas: shows that A and C are moments of ONE body about two axes.
+// Shares the `quad-f` oblateness slider.
+// ─────────────────────────────────────────────────────────────────────────────
+const axesCanvas = document.getElementById('axes-canvas');
+const axesCtx    = axesCanvas.getContext('2d');
+
+function drawAxes() {
+  const W = axesCanvas.width;
+  const H = axesCanvas.height;
+  axesCtx.clearRect(0, 0, W, H);
+
+  const cx = W / 2 - 70;
+  const cy = H / 2;
+  const aPx = 120;                  // equatorial radius
+  const cPx = aPx * (1 - qf);       // polar radius (shrinks with f)
+
+  // Filled oblate body
+  axesCtx.fillStyle = '#7aa2f7';
+  axesCtx.beginPath();
+  axesCtx.ellipse(cx, cy, aPx, cPx, 0, 0, 2 * Math.PI);
+  axesCtx.fill();
+  axesCtx.strokeStyle = '#30363d';
+  axesCtx.lineWidth = 1.5;
+  axesCtx.beginPath();
+  axesCtx.ellipse(cx, cy, aPx, cPx, 0, 0, 2 * Math.PI);
+  axesCtx.stroke();
+
+  // Sprinkle mass elements inside body
+  axesCtx.fillStyle = 'rgba(255,255,255,0.45)';
+  for (let i = 0; i < 70; i++) {
+    let dx, dy;
+    do {
+      dx = Math.random() * 2 - 1;
+      dy = Math.random() * 2 - 1;
+    } while (dx * dx + dy * dy > 1);
+    axesCtx.beginPath();
+    axesCtx.arc(cx + dx * aPx, cy + dy * cPx, 1.4, 0, 2 * Math.PI);
+    axesCtx.fill();
+  }
+
+  // Polar axis (vertical dashed) — used to compute C
+  const polarTop = cy - cPx - 50;
+  const polarBot = cy + cPx + 50;
+  axesCtx.strokeStyle = '#f7768e';
+  axesCtx.lineWidth = 2;
+  axesCtx.setLineDash([6, 4]);
+  axesCtx.beginPath();
+  axesCtx.moveTo(cx, polarTop);
+  axesCtx.lineTo(cx, polarBot);
+  axesCtx.stroke();
+  axesCtx.setLineDash([]);
+
+  // Equatorial axis (horizontal dashed) — used to compute A
+  const eqLeft  = cx - aPx - 50;
+  const eqRight = cx + aPx + 50;
+  axesCtx.strokeStyle = '#9ece6a';
+  axesCtx.lineWidth = 2;
+  axesCtx.setLineDash([6, 4]);
+  axesCtx.beginPath();
+  axesCtx.moveTo(eqLeft,  cy);
+  axesCtx.lineTo(eqRight, cy);
+  axesCtx.stroke();
+  axesCtx.setLineDash([]);
+
+  // Axis labels
+  axesCtx.font = 'bold 13px -apple-system, Segoe UI, sans-serif';
+  axesCtx.textAlign = 'center';
+  axesCtx.textBaseline = 'bottom';
+  axesCtx.fillStyle = '#f7768e';
+  axesCtx.fillText('polar axis → C', cx, polarTop - 4);
+  axesCtx.textAlign = 'left';
+  axesCtx.textBaseline = 'middle';
+  axesCtx.fillStyle = '#9ece6a';
+  axesCtx.fillText('equatorial axis → A', eqRight + 6, cy);
+
+  // Sample mass element in the equatorial bulge
+  const sampleX = 0.85 * aPx;       // near the bulge edge
+  const sampleY = 0.0  * cPx;       // on the equatorial plane
+  const smx = cx + sampleX;
+  const smy = cy + sampleY;
+
+  // Perpendicular distance to polar axis (horizontal segment, red)
+  axesCtx.strokeStyle = '#f7768e';
+  axesCtx.lineWidth = 2.5;
+  axesCtx.beginPath();
+  axesCtx.moveTo(cx,  smy);
+  axesCtx.lineTo(smx, smy);
+  axesCtx.stroke();
+
+  // Perpendicular distance to equatorial axis (vertical, green) — zero here
+  // so show a small stub upward from a slightly off-equator sample instead.
+  // Use a second sample higher up to make the A-distance visible.
+  const sample2X = 0.25 * aPx;
+  const sample2Y = -0.7 * cPx;
+  const sm2x = cx + sample2X;
+  const sm2y = cy + sample2Y;
+
+  axesCtx.strokeStyle = '#9ece6a';
+  axesCtx.lineWidth  = 2.5;
+  axesCtx.beginPath();
+  axesCtx.moveTo(sm2x, cy);
+  axesCtx.lineTo(sm2x, sm2y);
+  axesCtx.stroke();
+  // Also its distance to polar axis (horizontal, red)
+  axesCtx.strokeStyle = '#f7768e';
+  axesCtx.beginPath();
+  axesCtx.moveTo(cx,   sm2y);
+  axesCtx.lineTo(sm2x, sm2y);
+  axesCtx.stroke();
+
+  // The two sample mass elements
+  axesCtx.fillStyle = '#ffd166';
+  axesCtx.beginPath();
+  axesCtx.arc(smx, smy, 5, 0, 2 * Math.PI);
+  axesCtx.fill();
+  axesCtx.beginPath();
+  axesCtx.arc(sm2x, sm2y, 5, 0, 2 * Math.PI);
+  axesCtx.fill();
+
+  axesCtx.fillStyle = '#ffd166';
+  axesCtx.font = 'italic 13px serif';
+  axesCtx.textAlign = 'left';
+  axesCtx.textBaseline = 'middle';
+  axesCtx.fillText('dm (in bulge)', smx + 8, smy);
+  axesCtx.fillText('dm (near pole)', sm2x + 8, sm2y);
+
+  // Side panel: C and A values
+  // For a uniform oblate spheroid of equatorial radius a, polar c=(1-f)a, mass M:
+  //   A = B = (1/5) M (a² + c²)
+  //   C       = (2/5) M a²
+  // Normalize by (M a²) to get dimensionless values.
+  const cOnMa2 = 2 / 5;                     // C / (M a²)  — does not depend on f
+  const aOnMa2 = (1 + (1 - qf) ** 2) / 5;   // A / (M a²)
+  const J2     = cOnMa2 - aOnMa2;           // (C - A) / (M a²)  = (2f - f²)/5
+
+  const panelX = cx + aPx + 120;
+  let py = cy - 90;
+  const lh = 22;
+
+  axesCtx.textAlign = 'left';
+  axesCtx.textBaseline = 'top';
+
+  axesCtx.fillStyle = '#e6edf3';
+  axesCtx.font = '14px -apple-system, Segoe UI, sans-serif';
+  axesCtx.fillText(`oblateness  f = ${qf.toFixed(3)}`, panelX, py); py += lh + 6;
+
+  axesCtx.fillStyle = '#f7768e';
+  axesCtx.font = 'bold 14px -apple-system, Segoe UI, sans-serif';
+  axesCtx.fillText(`C = ∫ s²_polar dm`, panelX, py); py += lh;
+  axesCtx.font = '14px -apple-system, Segoe UI, sans-serif';
+  axesCtx.fillText(`  = ${cOnMa2.toFixed(4)} · M a²`, panelX, py); py += lh + 6;
+
+  axesCtx.fillStyle = '#9ece6a';
+  axesCtx.font = 'bold 14px -apple-system, Segoe UI, sans-serif';
+  axesCtx.fillText(`A = ∫ s²_equat dm`, panelX, py); py += lh;
+  axesCtx.font = '14px -apple-system, Segoe UI, sans-serif';
+  axesCtx.fillText(`  = ${aOnMa2.toFixed(4)} · M a²`, panelX, py); py += lh + 6;
+
+  axesCtx.fillStyle = '#ffd166';
+  axesCtx.font = 'bold 14px -apple-system, Segoe UI, sans-serif';
+  axesCtx.fillText(`C − A = ${(cOnMa2 - aOnMa2).toFixed(4)} · M a²`, panelX, py); py += lh;
+  axesCtx.font = '13px -apple-system, Segoe UI, sans-serif';
+  axesCtx.fillStyle = '#e6edf3';
+  axesCtx.fillText(`J₂ = (C−A)/(M a²) = ${J2.toFixed(4)}`, panelX, py);
+}
+
+drawAxes();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Third canvas: monopole / dipole / quadrupole zoo

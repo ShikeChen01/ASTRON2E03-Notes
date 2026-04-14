@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Planetary Heat Budget &amp; Cooling — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Planetary Heat Budget and Cooling</h1>
+      <p class="subtitle">
+        Why small worlds go cold: how planetary size controls cooling timescale,
+        and what heat sources keep larger bodies geologically alive today.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\tau_{\text{cool}} \propto \frac{V}{A} = \frac{R}{3} \quad \text{(scaling)}</span></p>
+        <p><span class="math-display">E_g = \tfrac{3}{5}\frac{GM^2}{R}, \quad \dot{E}_g = -\tfrac{3}{5}\frac{GM^2}{R^2}\dot{R}</span></p>
+        <p><span class="math-display">\text{Sources: accretion} + \text{differentiation} + \text{radiogenic} + \text{tidal}</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="heat-canvas" width="900" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Body radius R (km)
+            <input id="radius" type="range" min="500" max="7000" step="10" value="1737" />
+            <span id="radius-val">1737 km</span>
+          </label>
+          <div class="readout">
+            <span id="tau-readout">&#964;<sub>cool</sub> &asymp; 1.0 Gyr</span>
+            <span id="status-badge" class="badge cooled">COOLED</span>
+          </div>
+          <div class="preset-buttons">
+            <button class="preset" data-r="1737">Moon</button>
+            <button class="preset" data-r="2440">Mercury</button>
+            <button class="preset" data-r="3389">Mars</button>
+            <button class="preset" data-r="6052">Venus</button>
+            <button class="preset" data-r="6371">Earth</button>
+          </div>
+          <button id="replay">Replay cooling</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        <strong>Left — cross-section:</strong> the body's interior temperature is
+        shown by colour. At formation it is uniformly hot
+        (<span class="math">\#ffd166</span> orange-yellow). As time passes heat
+        escapes through the surface and the cool outer shell grows inward. The
+        rate at which the cold front advances depends on
+        <span class="math">\tau_{\text{cool}} \propto R</span> — smaller bodies
+        finish cooling in a fraction of the solar system's lifetime.
+      </p>
+      <p>
+        <strong>Small worlds cool fast</strong> because their
+        volume-to-surface-area ratio is small: there is less heat stored per unit
+        of radiating surface. The Moon and Mercury have been geologically inactive
+        for billions of years. Mars still shows traces of recent (Amazonian)
+        volcanism but its interior is largely frozen. Earth and Venus retain
+        enough heat for ongoing mantle convection, plate tectonics, and — on Earth
+        — a liquid-iron outer core that sustains the magnetic field.
+      </p>
+      <p>
+        <strong>Right — timescale chart:</strong> cooling timescales for five
+        Solar System bodies on a log scale. The vertical line marks 4.6 Gyr, the
+        current age of the Solar System. Bodies whose bar extends past that line
+        are still geologically active (green); those that fall short are now cold
+        and dead (grey). Gas giants such as Jupiter have an
+        <em>additional</em> heat source — gravitational contraction —
+        described by <span class="math">E_g = \tfrac{3}{5}GM^2/R</span>, which
+        releases energy as the planet slowly shrinks; Jupiter currently radiates
+        ~3.5&times;10<sup>17</sup> W more than it receives from the Sun.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Click <strong>Moon</strong>:
+            <span class="math">\tau \approx 1\ \text{Gyr}</span> — the cooling
+            animation finishes quickly and the status reads COOLED. The Moon has
+            been volcanically inactive for ~3 Gyr.</li>
+          <li>Click <strong>Earth</strong>:
+            <span class="math">\tau \approx 5\ \text{Gyr}</span> — the bar
+            crosses the 4.6 Gyr line and the status reads ACTIVE. Drag the slider
+            further right and the body stays hot even longer.</li>
+          <li>Set <strong>R = 1000 km</strong> — even smaller than the Moon. The
+            cool shell sweeps to the centre in the blink of an eye; the body
+            would have died geologically in the earliest epoch of the Solar
+            System.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

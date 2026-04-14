@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Moment of Inertia &amp; Gravitational Figure — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Moment of Inertia &amp; Gravitational Figure</h1>
+      <p class="subtitle">
+        How mass distribution inside a planet is encoded in a single
+        dimensionless number — and how rotation flattens the body.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">I = \int r^2\,dm, \quad C/MR^2 \in [0,\, 0.4]</span></p>
+        <p><span class="math-display">J_2 = \frac{C - A}{Ma^2}</span></p>
+        <p><span class="math-display">f = \frac{a - c}{a} \approx \tfrac{3}{2}J_2 + \tfrac{1}{2}\frac{a^3\omega^2}{GM}</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="moi-canvas" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Core fraction <span class="math">x = r_c/R</span>
+            <input id="core-frac" type="range" min="0" max="0.8" step="0.01" value="0.5" />
+            <span id="core-frac-val">0.50</span>
+          </label>
+          <label>
+            Density ratio <span class="math">k = \rho_c/\rho_m</span>
+            <input id="density-ratio" type="range" min="1" max="10" step="0.1" value="4" />
+            <span id="density-ratio-val">4.0</span>
+          </label>
+          <label>
+            Rotation rate <span class="math">\Omega</span>
+            <input id="rotation" type="range" min="0" max="1" step="0.01" value="0" />
+            <span id="rotation-val">0.00</span>
+          </label>
+          <div class="preset-row">
+            <button id="btn-earth">Earth</button>
+            <button id="btn-moon">Moon</button>
+            <button id="btn-uniform">Uniform</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The <strong>moment-of-inertia factor</strong>
+        <span class="math">C/MR^2</span> is a single dimensionless number
+        that captures how centrally concentrated a body's mass is. A
+        perfectly uniform sphere gives exactly
+        <span class="math">2/5 = 0.400</span>; any concentration of mass
+        toward the center drives it below that value. Earth's measured value
+        of <span class="math">0.3308</span> was historically the first
+        quantitative evidence for an iron core — long before seismology
+        confirmed it.
+      </p>
+      <p>
+        The left panel shows a two-layer cross-section: a dense inner core
+        (red, radius <span class="math">r_c = x R</span>) surrounded by a
+        less-dense mantle (blue). Drag the core fraction and density-contrast
+        sliders to see how the computed
+        <span class="math">C/MR^2</span> changes. The right panel displays
+        the live value alongside Earth and Moon reference lines.
+      </p>
+      <p>
+        The small ellipse in the lower-right shows the <strong>equatorial
+        bulge</strong> that rotation produces. For a fluid body in
+        hydrostatic equilibrium, faster spin → larger flattening
+        <span class="math">f = (a-c)/a</span>. Saturn's
+        <span class="math">f \approx 0.098</span> is visible to a telescope;
+        Earth's <span class="math">f \approx 0.0034</span> is subtle but
+        measurable from satellite orbits.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>
+            Set <span class="math">k = 1</span> (uniform): no matter what
+            core fraction you choose,
+            <span class="math">C/MR^2 = 0.400</span> exactly — the layers
+            are identical so their ratio never changes.
+          </li>
+          <li>
+            Click <strong>Earth</strong>:
+            <span class="math">C/MR^2</span> lands near
+            <span class="math">0.33</span>, matching the observed value and
+            confirming the large iron core.
+          </li>
+          <li>
+            Crank <span class="math">\Omega</span> to maximum with a uniform
+            body: watch the equatorial bulge balloon dramatically — this is
+            what Saturn's fast <span class="math">10.7</span>-hour day does
+            to its gas envelope.
+          </li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

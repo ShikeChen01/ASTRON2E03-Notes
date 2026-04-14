@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hydrostatic Equilibrium — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Hydrostatic Equilibrium and Central Pressure</h1>
+      <p class="subtitle">
+        How a planet's interior pressure balances gravity — and how to
+        estimate the pressure at the very center.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\frac{dP}{dr} = -\rho(r)\,g(r), \qquad \frac{dM}{dr} = 4\pi r^2 \rho(r)</span></p>
+        <p><span class="math-display">g(r) = \frac{4\pi G \rho r}{3}, \quad P(r) = \frac{2\pi G \rho^2}{3}(R^2 - r^2)</span></p>
+        <p><span class="math-display">P_c \approx \frac{3GM^2}{8\pi R^4}</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="hydrostatic" width="800" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Mass (Earth masses)
+            <input id="mass" type="range" min="0.05" max="320" step="0.05" value="1.0" />
+            <span id="mass-val">1.00</span>
+          </label>
+          <label>
+            Radius (Earth radii)
+            <input id="radius" type="range" min="0.5" max="11" step="0.05" value="1.0" />
+            <span id="radius-val">1.00</span>
+          </label>
+          <div class="preset-buttons">
+            <button id="btn-earth">Earth</button>
+            <button id="btn-mars">Mars</button>
+            <button id="btn-jupiter">Jupiter</button>
+            <button id="btn-neptune">Neptune</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        Hydrostatic equilibrium is the same balance you find in a stack of
+        plates — each layer must support the weight of everything above it.
+        Integrating this condition from the surface inward gives the pressure
+        profile. For a <strong>uniform-density sphere</strong> the result is
+        a <em>parabola</em>: pressure rises quadratically from zero at the
+        surface to a peak at the center.
+      </p>
+      <p>
+        The <strong>left panel</strong> shows the planet cross-section colored
+        by pressure — brightest yellow at the center, darkening through orange
+        to deep blue at the surface. The <strong>right panel</strong> plots
+        <span class="math">P(r)/P_c</span> against
+        <span class="math">r/R</span>; it always hits 1 at the center and 0
+        at the surface regardless of planet size.
+      </p>
+      <p>
+        The central-pressure formula <span class="math">P_c = 3GM^2/(8\pi R^4)</span>
+        is an <em>order-of-magnitude estimate</em>. Real planets have denser
+        cores, so true central pressures are typically 2–10× higher than the
+        uniform-density prediction.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Click <strong>Earth</strong>: <span class="math">P_c \approx 1.7\,\text{Mbar}</span>
+              (uniform estimate), about half the model value of 3.6 Mbar.</li>
+          <li>Click <strong>Jupiter</strong>: <span class="math">P_c</span> soars
+              by orders of magnitude due to the <span class="math">M^2</span>
+              scaling in the formula.</li>
+          <li>Try doubling <span class="math">R</span> while holding
+              <span class="math">M</span> fixed: <span class="math">P_c</span>
+              drops by 16× (the <span class="math">1/R^4</span> dependence),
+              which is why low-density fluffy planets have small central
+              pressures.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

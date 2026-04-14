@@ -1,0 +1,81 @@
+#surfaces {
+  aspect-ratio: 9 / 5;
+}
+
+.controls {
+  margin-top: 0.75rem;
+  align-items: flex-end;
+}
+
+.controls span {
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.toggle-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: var(--muted);
+  gap: 0.3rem;
+}
+
+.toggle-btn {
+  background: var(--border);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.8rem;
+  min-width: 52px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.toggle-btn[data-active="true"] {
+  background: #9ece6a;
+  color: #0e1116;
+  border-color: #9ece6a;
+}
+
+.toggle-btn:hover {
+  filter: brightness(1.15);
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.presets-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-right: 0.25rem;
+}
+
+.preset-btn {
+  background: #21262d;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.preset-btn:hover {
+  border-color: var(--accent);
+  background: #2d333b;
+}
+
+.preset-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #1c2333;
+}

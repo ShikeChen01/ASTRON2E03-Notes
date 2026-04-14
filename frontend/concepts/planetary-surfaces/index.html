@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Planetary Surfaces — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Surfaces — Cratering, Volcanism, Tectonics, Erosion</h1>
+      <p class="subtitle">
+        Four geological processes compete to shape terrestrial planet surfaces.
+        Crater density is a clock: old surfaces are heavily cratered, young ones are not.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">D_{\text{crater}} \approx 10 \cdot D_{\text{impactor}}</span></p>
+        <p><span class="math-display">N(>D) \propto D^{-b}, \quad b \approx 2</span></p>
+        <p><span class="math-display">\text{Crater density} \;\propto\; \text{surface age}</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="surfaces" width="900" height="500"></canvas>
+        <div class="controls">
+          <label>
+            Impact rate (craters/sec)
+            <input id="impact-rate" type="range" min="0" max="5" step="0.1" value="1" />
+            <span id="impact-rate-val">1.0</span>
+          </label>
+
+          <label class="toggle-label">
+            Volcanism
+            <button id="btn-volcanism" class="toggle-btn" data-active="false">OFF</button>
+          </label>
+
+          <label class="toggle-label">
+            Tectonics
+            <button id="btn-tectonics" class="toggle-btn" data-active="false">OFF</button>
+          </label>
+
+          <label class="toggle-label">
+            Erosion
+            <button id="btn-erosion" class="toggle-btn" data-active="false">OFF</button>
+          </label>
+
+          <button id="btn-reset">Reset</button>
+        </div>
+
+        <div class="presets">
+          <span class="presets-label">Presets:</span>
+          <button id="preset-moon" class="preset-btn">Moon</button>
+          <button id="preset-earth" class="preset-btn">Earth</button>
+          <button id="preset-venus" class="preset-btn">Venus</button>
+          <button id="preset-io" class="preset-btn">Io</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        The left panel shows a <strong>100 km &times; 100 km</strong> patch of planetary crust accumulating
+        impact craters over time. Crater diameters are drawn from a power-law distribution
+        <span class="math">N(>D) \propto D^{-2}</span> — small craters vastly outnumber large ones.
+        The right panel displays live statistics and a surface-age estimate derived from crater density.
+      </p>
+      <p>
+        <strong>Crater density as a clock:</strong> craters accumulate at a roughly steady rate (after
+        the early bombardment). A surface that has never been resurfaced preserves the full record —
+        the Moon's far side records ~4 Gyr of impacts. Earth's surface is constantly refreshed by
+        plate tectonics, volcanism, and erosion, so only ~190 confirmed impact structures survive.
+        Toggle <em>Volcanism</em> to see craters get buried; toggle <em>Erosion</em> to watch rims
+        gradually fade. Click <strong>Io</strong> to see the extreme: continuous volcanic resurfacing
+        keeps the crater count at zero.
+      </p>
+      <p>
+        <strong>Tectonics</strong> adds a slow lateral shear to the surface pattern, representing
+        how plate motion warps and disrupts the crust. In reality tectonics also drives mountain
+        building, rifting, and subduction — all of which destroy crater records.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Click <strong>Moon</strong>: craters accumulate quickly and persist forever — the surface ages before your eyes.</li>
+          <li>Click <strong>Earth</strong>: craters appear but are steadily erased — the crater count reaches a low equilibrium.</li>
+          <li>Click <strong>Io</strong>: volcanism is so intense that craters never accumulate at all.</li>
+          <li>Click <strong>Reset</strong>, turn off all processes, and crank impact rate to max — watch the power-law size distribution emerge: many small craters, rare large ones.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

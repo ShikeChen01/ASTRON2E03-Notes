@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Compositions, Differentiation &amp; Magnetic Fields — ASTRON2E03 Notes</title>
+    <link rel="stylesheet" href="/shared/base.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Compositions, Differentiation, and Magnetic Fields</h1>
+      <p class="subtitle">
+        How planets separate into layers — and why some planets have powerful
+        magnetic fields while others have none at all.
+      </p>
+
+      <h2>Key equations</h2>
+      <div class="panel">
+        <p><span class="math-display">\text{Dynamo: convection} + \text{conducting fluid} + \text{rotation}</span></p>
+        <p><span class="math-display">H_2 \xrightarrow{P > 100\text{ GPa}} \text{metallic H (conducting)}</span></p>
+        <p><span class="math-display">\text{Differentiation: } \rho_{\text{core}} > \rho_{\text{mantle}} > \rho_{\text{crust}}</span></p>
+      </div>
+
+      <h2>Interactive demo</h2>
+      <div class="panel">
+        <canvas id="planets" width="900" height="520"></canvas>
+        <div class="controls">
+          <span class="controls-label">Preset:</span>
+          <button class="preset-btn active" data-preset="earth-jupiter">Earth + Jupiter</button>
+          <button class="preset-btn" data-preset="mars-jupiter">Mars + Jupiter</button>
+          <button class="preset-btn" data-preset="venus-saturn">Venus + Saturn</button>
+          <button class="preset-btn" data-preset="moon-neptune">Moon + Neptune</button>
+        </div>
+      </div>
+
+      <h2>What you're seeing</h2>
+      <p>
+        <strong>Terrestrial planets</strong> differentiate gravitationally during their hot early
+        histories: dense iron-nickel sinks to form a <em>core</em> (often a solid inner core
+        surrounded by a liquid outer core), silicate rock forms the <em>mantle</em>, and the
+        lightest material rises to become a thin <em>crust</em>. The liquid outer core is the
+        key ingredient — it is both electrically conducting and able to convect.
+      </p>
+      <p>
+        <strong>Giant planets</strong> work differently. Their interiors are dominated by
+        hydrogen and helium, but pressure increases so rapidly with depth that beyond roughly
+        100 GPa hydrogen transitions into a <em>metallic</em> state — electrons are freed from
+        their atoms, making the fluid an excellent conductor. This metallic-hydrogen layer plays
+        the same role that liquid iron plays in Earth's core.
+      </p>
+      <p>
+        <strong>A dynamo</strong> needs all three ingredients simultaneously: a convecting fluid,
+        electrical conductivity, and planetary rotation. Mars lost its dynamo early because its
+        small core cooled and froze. Venus rotates so slowly that the Coriolis effect is too
+        weak to organize the convection into field-generating flows. The Moon's iron fraction is
+        simply too small. Uranus and Neptune host dynamos, but in shallow ionic-water layers
+        rather than metallic hydrogen — producing weaker, more tilted fields.
+      </p>
+
+      <div class="try-this">
+        <h3>Try this</h3>
+        <ul>
+          <li>Click <strong>Earth + Jupiter</strong>: both planets show strong magnetic fields,
+              but for completely different reasons — liquid iron on the left, metallic hydrogen
+              on the right.</li>
+          <li>Click <strong>Mars</strong>: its outer core is shown as a frozen (no-liquid) region
+              and the field arcs disappear — Mars had a dynamo early in its history but lost it
+              when the core solidified.</li>
+          <li>Click <strong>Moon</strong>: the iron core is tiny relative to the planet's size,
+              too small to sustain convective flow, so no dynamo has existed for billions of
+              years.</li>
+        </ul>
+      </div>
+    </main>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

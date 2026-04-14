@@ -60,11 +60,23 @@ const lambdas_um = Array.from({ length: N_POINTS }, (_, i) =>
 );
 const lambdas_m = lambdas_um.map(l => l * 1e-6);
 
-// Compute Planck values for a given T, normalised to peak=1
-function planckNormalized(T) {
-  const raw = lambdas_m.map(lm => planck(lm, T));
-  const peak = Math.max(...raw);
-  return raw.map(v => (peak > 0 ? v / peak : 0));
+// Compute Planck values for a given T (absolute SI units).
+// We deliberately do NOT normalise — the whole point is to see hotter
+// curves tower over colder ones (Stefan–Boltzmann: area ∝ T⁴).
+function planckAbsolute(T) {
+  return lambdas_m.map(lm => planck(lm, T));
+}
+
+// Pick the brightest value across a set of curves so we can scale the
+// y-axis consistently. Ignores zeros and non-finite entries.
+function maxOfCurves(curves) {
+  let m = 0;
+  for (const curve of curves) {
+    for (const v of curve) {
+      if (Number.isFinite(v) && v > m) m = v;
+    }
+  }
+  return m;
 }
 
 // ── Drawing helpers ───────────────────────────────────────────────────────────
@@ -135,7 +147,7 @@ function drawAxes() {
   ctx.translate(14, M.top + H / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.textAlign = 'center';
-  ctx.fillText('spectral radiance (log, normalised)', 0, 0);
+  ctx.fillText('spectral radiance  B_λ  (W m⁻² m⁻¹ sr⁻¹, log)', 0, 0);
   ctx.restore();
 }
 
@@ -217,13 +229,16 @@ function drawReadout(T) {
 
 // ── Main draw ─────────────────────────────────────────────────────────────────
 function draw(T) {
-  // Compute normalised curves
-  const mainCurve  = planckNormalized(T);
-  const ghostCurves = Object.values(PRESETS).map(pt => planckNormalized(pt));
+  // Compute absolute Planck curves (no per-curve normalization, so hotter
+  // curves really are taller than cooler ones on the plot).
+  const mainCurve   = planckAbsolute(T);
+  const ghostCurves = Object.values(PRESETS).map(pt => planckAbsolute(pt));
 
-  // Y range: log10 of normalised values — always 1e-10 to 1
-  yMin = -10;
-  yMax =  0;
+  // Y range spans the brightest point currently on screen down ~14 decades.
+  // 14 decades lets Earth (~1e7) and the Sun (~1e13) both be visible.
+  const globalMax = maxOfCurves([mainCurve, ...ghostCurves]);
+  yMax = Math.ceil(Math.log10(globalMax || 1));     // e.g. 14 for the Sun
+  yMin = yMax - 14;                                  // 14 decades below
 
   // Clear
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -233,15 +248,58 @@ function draw(T) {
   drawVisibleBand();
   drawGrid();
   drawAxes();
+  drawYTicks();
 
-  // Ghost curves
-  ghostCurves.forEach(gc => drawCurve(gc, 'rgba(48,54,61,0.9)', 1.5));
+  // Ghost curves (Sun / Earth / Jupiter) for comparison
+  const ghostColors = ['rgba(255,209,102,0.65)', 'rgba(122,162,247,0.65)', 'rgba(158,206,106,0.65)'];
+  const ghostLabels = ['Sun 5778 K', 'Earth 288 K', 'Jupiter 125 K'];
+  ghostCurves.forEach((gc, i) => drawCurve(gc, ghostColors[i], 1.75));
 
-  // Main curve
-  drawCurve(mainCurve, '#bb9af7', 2.5);
+  // Main curve (current slider T) on top
+  drawCurve(mainCurve, '#bb9af7', 3);
+
+  // Ghost legend in top-right
+  drawGhostLegend(ghostColors, ghostLabels);
 
   drawWienLine(T);
   drawReadout(T);
+}
+
+// Numeric labels on the Y axis at each decade
+function drawYTicks() {
+  ctx.fillStyle = '#8b949e';
+  ctx.font      = '11px monospace';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for (let ly = Math.ceil(yMin); ly <= Math.floor(yMax); ly++) {
+    const y = yToCanvas(Math.pow(10, ly));
+    ctx.fillText(`10^${ly}`, M.left - 6, y);
+    ctx.strokeStyle = '#8b949e';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(M.left - 4, y);
+    ctx.lineTo(M.left,     y);
+    ctx.stroke();
+  }
+}
+
+function drawGhostLegend(colors, labels) {
+  const x0 = M.left + W - 150;
+  const y0 = M.top + 8;
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  labels.forEach((label, i) => {
+    const y = y0 + i * 16;
+    ctx.strokeStyle = colors[i];
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x0,      y);
+    ctx.lineTo(x0 + 22, y);
+    ctx.stroke();
+    ctx.fillStyle = '#e6edf3';
+    ctx.fillText(label, x0 + 28, y);
+  });
 }
 
 // ── Controls ──────────────────────────────────────────────────────────────────
